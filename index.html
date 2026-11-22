@@ -647,16 +647,11 @@
   </div>
 
   <script>
-    // ==========================================
-    // GESTION DES IMAGES (WIKIPÉDIA EN PAR TITRE/SCI)
-    // ==========================================
     const IMAGE_MODE = "wiki-sci";
     const imageCache = new Map();
 
     const FORBIDDEN_URL_PARTS = [
-      "map", "flag", "coat_of_arms", "locator", "range", "distribution",
-      "svg", "diagram", "chart", "icon", "logo", "stamp", "skeleton",
-      "grassland", "meadow", "prairie", "savanna", "habitat"
+      "map", "flag", "coat_of_arms", "locator", "stamp"
     ];
 
     function isValidAnimalPhotoUrl(url) {
@@ -666,15 +661,10 @@
       return !FORBIDDEN_URL_PARTS.some(part => lower.includes(part));
     }
 
-    // Helper compact pour créer des entrées d'animaux/créatures
     const c = (name, sci, cat, weight, length, longevity, gestation) => ({
       name, sci, cat, weight, length, longevity, gestation
     });
 
-    // ==========================================
-    // 10 PAQUETS THÉMATIQUES (40 CARTES CHACUN)
-    // weight: kg | length: m | longevity: ans | gestation: jours
-    // ==========================================
     const DECK_PACKS = {
       "animaux de la forêt": {
         label: "Animaux de la forêt",
@@ -702,7 +692,7 @@
           c("Vipère péliade", "Vipera_berus", "Reptile", 0.18, 0.75, 15, 90),
           c("Couleuvre à collier", "Natrix_natrix", "Reptile", 0.25, 1.2, 16, 60),
           c("Lézard vert", "European_green_lizard", "Reptile", 0.06, 0.4, 10, 50),
-          c("Ratons laveurs", "Raccoon", "Procyonidé", 8, 0.75, 13, 63),
+          c("Raton laveur", "Raccoon", "Procyonidé", 8, 0.75, 13, 63),
           c("Porc-épic d'Amérique", "North_American_porcupine", "Rongeur", 9, 0.8, 18, 210),
           c("Moufette rayée", "Striped_skunk", "Méphitidé", 3.5, 0.65, 8, 63),
           c("Wapiti", "Elk", "Cervidé", 330, 2.5, 18, 250),
@@ -738,8 +728,8 @@
           c("Mammouth laineux", "Woolly_mammoth", "Proboscidien", 6000, 4.0, 60, 660),
           c("Smilodon", "Smilodon", "Machairodontiné", 280, 2.1, 20, 105),
           c("Mégathérium", "Megatherium", "Xénarthre", 4000, 6.0, 35, 300),
-          c("Mésalocéros / Paracératérium", "Paraceratherium", "Périssodactyle", 17000, 7.5, 45, 500),
-          c("Mégalodon", "Megalodon", "Lamniforme", 48000, 16.0, 80, 365),
+          c("Paracératérium", "Paraceratherium", "Périssodactyle", 17000, 7.5, 45, 500),
+          c("Mégalodon", "Otodus_megalodon", "Lamniforme", 48000, 16.0, 80, 365),
           c("Mosasaure", "Mosasaurus", "Squamate marin", 14000, 15.0, 45, 150),
           c("Plésiosaure", "Plesiosaurus", "Sauroptérygien", 2000, 4.5, 30, 120),
           c("Ichtyosaure", "Ichthyosaurus", "Ichtyoptérygien", 400, 3.0, 25, 110),
@@ -758,7 +748,7 @@
           c("Titanoboa", "Titanoboa", "Serpent", 1135, 13.0, 30, 180),
           c("Arthropleura", "Arthropleura", "Myriapode", 50, 2.5, 10, 40),
           c("Anomalocaris", "Anomalocaris", "Radiodonte", 15, 1.0, 8, 20),
-          c("Trilobite", "Trilobita", "Arthropode", 0.5, 0.3, 6, 15),
+          c("Trilobite", "Trilobite", "Arthropode", 0.5, 0.3, 6, 15),
           c("Ammonite", "Ammonoidea", "Céphalopode", 2.0, 0.6, 10, 25),
           c("Megaloceros", "Megaloceros", "Cervidé", 700, 2.5, 20, 240),
           c("Doedicurus", "Doedicurus", "Glyptodontidé", 1900, 3.6, 30, 240),
@@ -790,14 +780,14 @@
           c("Phoque gris", "Grey_seal", "Pinnipède", 250, 2.3, 35, 345),
           c("Lamantin", "Manatee", "Sirénien", 550, 3.5, 50, 380),
           c("Dugong", "Dugong", "Sirénien", 400, 3.0, 70, 410),
-          c("Méduse crinière de lion", "Lion%27s_mane_jellyfish", "Cnidaire", 150, 2.2, 1, 30),
+          c("Méduse crinière de lion", "Lion's_mane_jellyfish", "Cnidaire", 150, 2.2, 1, 30),
           c("Poisson-lune", "Ocean_sunfish", "Poisson osseux", 1500, 2.5, 10, 90),
           c("Espadon voilier", "Indo-Pacific_sailfish", "Poisson osseux", 90, 3.2, 12, 20),
           c("Thon rouge", "Atlantic_bluefin_tuna", "Poisson osseux", 450, 3.0, 35, 15),
           c("Murène verte", "Green_moray", "Poisson osseux", 15, 2.0, 25, 30),
           c("Hippocampe", "Seahorse", "Poisson osseux", 0.02, 0.15, 4, 21),
           c("Poisson-clown", "Amphiprioninae", "Poisson osseux", 0.15, 0.11, 8, 8),
-          c("Poisson-ange", "Angelfish", "Poisson osseux", 0.5, 0.25, 15, 12),
+          c("Poisson-ange", "Marine_angelfish", "Poisson osseux", 0.5, 0.25, 15, 12),
           c("Béluga", "Beluga_whale", "Cétacé", 1300, 4.5, 40, 450),
           c("Marsouin commun", "Harbour_porpoise", "Cétacé", 60, 1.7, 20, 315),
           c("Requin-tigre", "Tiger_shark", "Requin", 600, 4.2, 30, 420),
@@ -837,9 +827,9 @@
           c("Lemming", "Lemming", "Rongeur", 0.08, 0.15, 3, 21),
           c("Phoque de Weddell", "Weddell_seal", "Pinnipède", 450, 3.0, 25, 300),
           c("Albatros hurleur", "Wandering_albatross", "Oiseau", 9.0, 1.35, 55, 78),
-          c("Puffin / Macareux", "Atlantic_puffin", "Oiseau", 0.5, 0.3, 25, 40),
+          c("Macareux moine", "Atlantic_puffin", "Oiseau", 0.5, 0.3, 25, 40),
           c("Orque", "Orca", "Delphinidé", 4500, 8.0, 60, 510),
-          c("Mouton de Dall", "Dall_sheep", "Bovidé", 80, 1.5, 14, 170),
+          c("Mouflon de Dall", "Dall_sheep", "Bovidé", 80, 1.5, 14, 170),
           c("Chèvre des montagnes", "Mountain_goat", "Bovidé", 90, 1.6, 15, 180),
           c("Panthère des neiges", "Snow_leopard", "Félidé", 45, 2.0, 18, 100),
           c("Yak sauvage", "Wild_yak", "Bovidé", 800, 2.8, 23, 258),
@@ -853,9 +843,9 @@
           c("Gorfou sauteur", "Southern_rockhopper_penguin", "Oiseau", 3.0, 0.55, 15, 34),
           c("Manchot royal", "King_penguin", "Oiseau", 14, 0.9, 25, 55),
           c("Pétrel des neiges", "Snow_petrel", "Oiseau", 0.35, 0.38, 20, 45),
-          c("Moustique arctique / Bourdon", "Bombus_polaris", "Insecte", 0.002, 0.02, 1, 20),
-          c("Caribou des bois", "Woodland_caribou", "Cervidé", 210, 2.1, 17, 230),
-          c("Ours blanc / Kodiak", "Kodiak_bear", "Ursidé", 450, 2.5, 25, 220),
+          c("Bourdon polaire", "Bombus_polaris", "Insecte", 0.002, 0.02, 1, 20),
+          c("Caribou des bois", "Reindeer", "Cervidé", 210, 2.1, 17, 230),
+          c("Ours kodiak", "Kodiak_bear", "Ursidé", 450, 2.5, 25, 220),
           c("Baleine boréale", "Bowhead_whale", "Cétacé", 80000, 16.0, 150, 400)
         ]
       },
@@ -973,13 +963,13 @@
           c("Gibbon agile", "Agile_gibbon", "Primate", 6.0, 0.6, 35, 210),
           c("Singe hurleur", "Howler_monkey", "Primate", 7.5, 0.8, 20, 185),
           c("Coati", "Coati", "Procyonidé", 5.5, 1.1, 14, 75),
-          c("Dendrobate / Grenouille", "Poison_dart_frog", "Amphibien", 0.01, 0.04, 10, 14),
+          c("Dendrobate", "Poison_dart_frog", "Amphibien", 0.01, 0.04, 10, 14),
           c("Caïman à lunettes", "Spectacled_caiman", "Reptile", 40, 2.2, 35, 80),
           c("Éléphant d'Asie", "Asian_elephant", "Mammifère", 4500, 6.0, 65, 640),
-          c("Léopard tacheté / Panthère", "Leopard", "Félidé", 65, 1.9, 17, 100),
+          c("Léopard", "Leopard", "Félidé", 65, 1.9, 17, 100),
           c("Okapi", "Okapi", "Mammifère", 250, 2.2, 25, 440),
           c("Mandrill", "Mandrill", "Primate", 32, 0.9, 25, 175),
-          c("Lémurien / Aye-aye", "Aye-aye", "Primate", 2.5, 0.8, 20, 155),
+          c("Aye-aye", "Aye-aye", "Primate", 2.5, 0.8, 20, 155),
           c("Pangolin de Malaisie", "Sunda_pangolin", "Pholidote", 8.0, 1.1, 15, 130),
           c("Ours malais", "Sun_bear", "Ursidé", 55, 1.4, 25, 95),
           c("Binturong", "Binturong", "Viverridé", 15, 1.5, 22, 91),
@@ -994,7 +984,7 @@
           c("Tamarin empereur", "Emperor_tamarin", "Primate", 0.5, 0.25, 16, 145),
           c("Cobra royal", "King_cobra", "Serpent", 8.0, 4.0, 20, 75),
           c("Colibri", "Hummingbird", "Oiseau", 0.005, 0.09, 8, 16),
-          c("Bousier / Scarabée rhinocéros", "Dynastinae", "Insecte", 0.02, 0.07, 2, 30)
+          c("Scarabée rhinocéros", "Dynastinae", "Insecte", 0.02, 0.07, 2, 30)
         ]
       },
 
@@ -1049,43 +1039,43 @@
         cards: [
           c("Dragon rouge", "Dragon", "Créature draconique", 18000, 22.0, 500, 365),
           c("Dragon de glace", "Wyvern", "Créature draconique", 14000, 18.0, 400, 300),
-          c("Phénix", "Phoenix", "Oiseau légendaire", 120, 4.5, 1000, 99),
+          c("Phénix", "Phoenix_(mythology)", "Oiseau légendaire", 120, 4.5, 1000, 99),
           c("Licorne", "Unicorn", "Créature féerique", 650, 2.8, 250, 330),
           c("Pégase", "Pegasus", "Cheval ailé", 750, 3.2, 200, 340),
           c("Griffon", "Griffin", "Hybride légendaire", 900, 3.8, 180, 120),
-          c("Basilic", "Basilisk_(creature)", "Reptile légendaire", 1200, 12.0, 300, 90),
+          c("Basilic", "Basilisk", "Reptile légendaire", 1200, 12.0, 300, 90),
           c("Kraken", "Kraken", "Monstre marin", 95000, 35.0, 600, 240),
           c("Léviathan", "Leviathan", "Monstre marin", 160000, 40.0, 900, 400),
           c("Yéti", "Yeti", "Cryptide", 420, 2.9, 120, 260),
           c("Loup-garou", "Werewolf", "Métamorphe", 240, 2.4, 150, 63),
           c("Golem de pierre", "Golem", "Créature élémentaire", 4500, 3.5, 800, 1),
-          c("Ent / Sylvebarbe", "Ent", "Esprit de forêt", 12000, 8.5, 2000, 365),
+          c("Ent", "Ent", "Esprit de forêt", 12000, 8.5, 2000, 365),
           c("Manticore", "Manticore", "Bête mythique", 650, 3.5, 140, 110),
           c("Vouivre", "Wyvern", "Draconidé", 6000, 14.0, 350, 180),
           c("Hippogriffe", "Hippogriff", "Hybride légendaire", 700, 3.1, 160, 220),
           c("Sirène des mers", "Mermaid", "Créature marine", 85, 2.0, 300, 270),
           c("Chimère", "Chimera_(mythology)", "Hybride légendaire", 800, 3.6, 220, 120),
-          c("Salamandre de feu", "Salamanders_(mythology)", "Élémentaire", 40, 1.5, 300, 60),
+          c("Salamandre de feu", "Salamanders_in_folklore", "Élémentaire", 40, 1.5, 300, 60),
           c("Gargouille", "Gargoyle", "Gardien", 1500, 2.6, 500, 1),
-          c("Tigre à dents de sabre spectral", "Smilodon", "Bête ancienne", 350, 2.4, 120, 105),
+          c("Tigre à dents de sabre", "Smilodon", "Bête ancienne", 350, 2.4, 120, 105),
           c("Cerbère", "Cerberus", "Gardien infernal", 1400, 4.0, 1000, 90),
-          c("Djin / Génie", "Genie", "Esprit", 10, 3.0, 5000, 1),
+          c("Génie", "Genies", "Esprit", 10, 3.0, 5000, 1),
           c("Cockatrice", "Cockatrice", "Créature légendaire", 60, 1.8, 120, 42),
           c("Kelpie", "Kelpie", "Esprit aquatique", 1100, 3.5, 300, 200),
-          c("Banshee / Esprit des brumes", "Banshee", "Esprit", 5, 1.7, 900, 1),
+          c("Banshee", "Banshee", "Esprit", 5, 1.7, 900, 1),
           c("Minotaure", "Minotaur", "Bête légendaire", 950, 3.1, 250, 270),
           c("Cyclope", "Cyclops", "Géant mythique", 2200, 4.8, 300, 270),
-          c("Troll des cavernes", "Troll", "Géant", 1800, 3.8, 400, 240),
+          c("Troll", "Troll", "Géant", 1800, 3.8, 400, 240),
           c("Gobelin", "Goblin", "Créature nocturne", 45, 1.1, 70, 180),
-          c("Fée des bois", "Fairy", "Créature féerique", 0.2, 0.25, 400, 60),
+          c("Fée", "Fairy", "Créature féerique", 0.2, 0.25, 400, 60),
           c("Chupacabra", "Chupacabra", "Cryptide", 75, 1.4, 60, 90),
           c("Mothman", "Mothman", "Cryptide", 110, 2.3, 80, 45),
-          c("Dragon oriental / Lung", "Chinese_dragon", "Dragon céleste", 12000, 25.0, 1000, 300),
-          c("Poulpe géant abyssal", "Giant_squid", "Monstre des abysses", 12000, 24.0, 400, 180),
-          c("Loup d'ombre", "Dire_wolf", "Bête nocturne", 190, 2.1, 130, 63),
-          c("Corbeau messager", "Raven", "Oiseau mystique", 3.0, 1.1, 250, 30),
+          c("Dragon oriental", "Chinese_dragon", "Dragon céleste", 12000, 25.0, 1000, 300),
+          c("Calmar géant", "Giant_squid", "Monstre des abysses", 12000, 24.0, 400, 180),
+          c("Loup sinistre", "Dire_wolf", "Bête nocturne", 190, 2.1, 130, 63),
+          c("Corbeau mystique", "Raven", "Oiseau mystique", 3.0, 1.1, 250, 30),
           c("Cheval spectral", "Nightmare_(horse)", "Monture sombre", 850, 2.9, 300, 340),
-          c("Tortue-île", "World_turtle", "Colosse", 500000, 150.0, 10000, 1000),
+          c("Tortue-monde", "World_turtle", "Colosse", 500000, 150.0, 10000, 1000),
           c("Renard à neuf queues", "Nine-tailed_fox", "Esprit renard", 120, 2.5, 1000, 100)
         ]
       },
@@ -1097,47 +1087,46 @@
           c("Cerbère", "Cerberus", "Mythologie grecque", 1400, 4.0, 1000, 90),
           c("Hydre de Lerne", "Lernaean_Hydra", "Mythologie grecque", 6500, 18.0, 999, 120),
           c("Minotaure", "Minotaur", "Mythologie grecque", 950, 3.1, 250, 270),
-          c("Méduse / Gorgone", "Gorgon", "Mythologie grecque", 120, 2.2, 500, 270),
+          c("Gorgone", "Gorgon", "Mythologie grecque", 120, 2.2, 500, 270),
           c("Chimère", "Chimera_(mythology)", "Mythologie grecque", 800, 3.6, 220, 120),
           c("Griffon", "Griffin", "Mythologie grecque", 900, 3.8, 180, 120),
           c("Taureau crétois", "Cretan_Bull", "Mythologie grecque", 1300, 3.2, 150, 280),
           c("Lion de Némée", "Nemean_lion", "Mythologie grecque", 750, 3.4, 200, 110),
           c("Biche de Cérynie", "Hind_of_Ceryneia", "Mythologie grecque", 180, 2.1, 300, 235),
           c("Sanglier d'Érymanthe", "Erymanthian_boar", "Mythologie grecque", 1100, 3.0, 180, 115),
-          c("Oiseaux du lac Stymphale", "Stymphalian_birds", "Mythologie grecque", 45, 1.5, 200, 30),
+          c("Oiseaux du Stymphale", "Stymphalian_birds", "Mythologie grecque", 45, 1.5, 200, 30),
           c("Scylla", "Scylla", "Mythologie grecque", 5000, 12.0, 600, 180),
           c("Charybde", "Charybdis", "Mythologie grecque", 80000, 25.0, 999, 365),
           c("Typhon", "Typhon", "Mythologie grecque", 45000, 30.0, 1000, 365),
           c("Échidna", "Echidna_(mythology)", "Mythologie grecque", 2500, 10.0, 800, 150),
           c("Orthos", "Orthrus", "Mythologie grecque", 320, 2.0, 500, 63),
-          c("Phénix", "Phoenix", "Mythologie grecque", 120, 4.5, 1000, 99),
-          c("Hippocampe mythologique", "Hippocampus_(mythology)", "Mythologie grecque", 600, 3.5, 300, 240),
+          c("Phénix", "Phoenix_(mythology)", "Mythologie grecque", 120, 4.5, 1000, 99),
+          c("Hippocampe", "Hippocampus_(mythology)", "Mythologie grecque", 600, 3.5, 300, 240),
           c("Sirène grecque", "Siren_(mythology)", "Mythologie grecque", 65, 1.8, 400, 270),
           c("Harpie", "Harpy", "Mythologie grecque", 55, 1.9, 300, 45),
-          c("Sphinx grec", "Sphinx", "Mythologie grecque", 500, 3.2, 400, 120),
+          c("Sphinx", "Sphinx", "Mythologie grecque", 500, 3.2, 400, 120),
           c("Centaure", "Centaur", "Mythologie grecque", 600, 2.6, 150, 330),
           c("Satyre", "Satyr", "Mythologie grecque", 95, 1.8, 120, 270),
-          c("Cyclope Polyphème", "Cyclops", "Mythologie grecque", 2200, 4.8, 300, 270),
+          c("Cyclope", "Cyclops", "Mythologie grecque", 2200, 4.8, 300, 270),
           c("Python de Delphes", "Python_(mythology)", "Mythologie grecque", 3500, 14.0, 700, 120),
-          c("Ladon / Dragon des Hespérides", "Ladon_(mythology)", "Mythologie grecque", 8000, 20.0, 900, 180),
-          c("Colombe d'Aphrodite", "Dove", "Mythologie grecque", 0.4, 0.35, 100, 18),
-          c("Aigle de Zeus", "Eagle", "Mythologie grecque", 12, 1.4, 300, 45),
-          c("Chouette d'Athéna", "Little_owl", "Mythologie grecque", 0.3, 0.25, 200, 28),
-          c("Paon d'Héra", "Indian_peafowl", "Mythologie grecque", 6.0, 2.2, 200, 28),
-          c("Corbeau d'Apollon", "Raven", "Mythologie grecque", 2.0, 0.7, 250, 30),
-          c("Cygne d'Apollon", "Swan", "Mythologie grecque", 14, 1.6, 200, 35),
-          c("Dauphin de Poséidon", "Dolphin", "Mythologie grecque", 350, 3.2, 300, 365),
-          c("Taureau de Poséidon", "Bull", "Mythologie grecque", 1250, 3.0, 180, 280),
-          c("Bélier à toison d'or", "Golden_Fleece", "Mythologie grecque", 220, 2.0, 300, 150),
-          c("Chevaux de Diomède", "Mares_of_Diomedes", "Mythologie grecque", 700, 2.7, 150, 340),
-          c("Céto / Monstre marin", "Ceto", "Mythologie grecque", 50000, 22.0, 900, 365),
-          c("Argos / Chien d'Ulysse", "Argos_(dog)", "Mythologie grecque", 35, 1.1, 20, 63),
-          c("Mirmidon / Fourmi mythique", "Myrmidons", "Mythologie grecque", 60, 1.7, 120, 270)
+          c("Ladon", "Ladon_(mythology)", "Mythologie grecque", 8000, 20.0, 900, 180),
+          c("Colombe", "Dove", "Mythologie grecque", 0.4, 0.35, 100, 18),
+          c("Aigle", "Eagle", "Mythologie grecque", 12, 1.4, 300, 45),
+          c("Chouette chevêche", "Little_owl", "Mythologie grecque", 0.3, 0.25, 200, 28),
+          c("Paon", "Indian_peafowl", "Mythologie grecque", 6.0, 2.2, 200, 28),
+          c("Corbeau", "Raven", "Mythologie grecque", 2.0, 0.7, 250, 30),
+          c("Cygne", "Swan", "Mythologie grecque", 14, 1.6, 200, 35),
+          c("Dauphin", "Dolphin", "Mythologie grecque", 350, 3.2, 300, 365),
+          c("Taureau", "Bull", "Mythologie grecque", 1250, 3.0, 180, 280),
+          c("Bélier", "Sheep", "Mythologie grecque", 220, 2.0, 300, 150),
+          c("Cheval", "Horse", "Mythologie grecque", 700, 2.7, 150, 340),
+          c("Céto", "Ceto", "Mythologie grecque", 50000, 22.0, 900, 365),
+          c("Chien", "Dog", "Mythologie grecque", 35, 1.1, 20, 63),
+          c("Fourmi", "Ant", "Mythologie grecque", 0.01, 0.02, 5, 20)
         ]
       }
     };
 
-    // Peupler le menu déroulant des 10 paquets
     const selectDeckType = document.getElementById("select-deck-type");
     Object.entries(DECK_PACKS).forEach(([key, pack]) => {
       const opt = document.createElement("option");
@@ -1146,25 +1135,51 @@
       selectDeckType.appendChild(opt);
     });
 
+    async function fetchSummaryUrl(lang, title) {
+      const cleanTitle = encodeURIComponent(decodeURIComponent(title).replace(/\s+/g, "_"));
+      const res = await fetch(`https://${lang}.wikipedia.org/api/rest_v1/page/summary/${cleanTitle}`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      const candidate = data?.thumbnail?.source || data?.originalimage?.source || null;
+      return isValidAnimalPhotoUrl(candidate) ? candidate : null;
+    }
+
+    async function searchWikiFallbackUrl(lang, queryText) {
+      const params = new URLSearchParams({
+        action: "query",
+        format: "json",
+        origin: "*",
+        list: "search",
+        srsearch: queryText,
+        srlimit: "1"
+      });
+      const res = await fetch(`https://${lang}.wikipedia.org/w/api.php?${params.toString()}`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      const hitTitle = data?.query?.search?.[0]?.title;
+      if (!hitTitle) return null;
+      return fetchSummaryUrl(lang, hitTitle);
+    }
+
     async function fetchWikiAnimalImage(card) {
-      const cacheKey = card.sci;
+      const cacheKey = `${card.sci}|${card.name}`;
       if (imageCache.has(cacheKey)) return imageCache.get(cacheKey);
 
       try {
-        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${card.sci}`);
-        if (!res.ok) throw new Error("wiki summary failed");
-        const data = await res.json();
-        const candidate = data?.originalimage?.source || data?.thumbnail?.source || null;
-        if (isValidAnimalPhotoUrl(candidate)) {
-          imageCache.set(cacheKey, candidate);
-          return candidate;
-        }
-      } catch {
-        // Ignore network/API error
-      }
+        // 1. Article exact sur Wikipédia EN
+        let url = await fetchSummaryUrl("en", card.sci);
+        // 2. Repli sur Wikipédia FR avec le nom affiché
+        if (!url) url = await fetchSummaryUrl("fr", card.name);
+        // 3. Repli via recherche EN puis FR
+        if (!url) url = await searchWikiFallbackUrl("en", card.sci.replace(/_/g, " "));
+        if (!url) url = await searchWikiFallbackUrl("fr", card.name);
 
-      imageCache.set(cacheKey, null);
-      return null;
+        imageCache.set(cacheKey, url || null);
+        return url || null;
+      } catch {
+        imageCache.set(cacheKey, null);
+        return null;
+      }
     }
 
     async function setAnimalVisual(card, imgEl, fallbackEl) {
