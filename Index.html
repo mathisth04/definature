@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Fauna Duel" />
+  <meta name="theme-color" content="#0b0f17" />
+  <title>Fauna Duel — Bataille Animale</title>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --surface: #131a29;
+      --surface-2: #1b2438;
+      --border: #26324d;
+      --text: #f1f5f9;
+      --muted: #8b9bb4;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.22);
+      --win: #10b981;
+      --win-bg: rgba(16, 185, 129, 0.16);
+      --lose: #ef4444;
+      --lose-bg: rgba(239, 68, 68, 0.16);
+      --tie: #f59e0b;
+      --tie-bg: rgba(245, 158, 11, 0.16);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+    }
+
+    .app {
+      height: 100dvh;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top, 12px) + 10px) 16px calc(env(safe-area-inset-bottom, 12px) + 12px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* ÉCRANS */
+    .screen {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+    }
+    .screen.active {
+      display: flex;
+    }
+
+    /* LOBBY */
+    .lobby-header {
+      text-align: center;
+      margin-top: 16px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .lobby-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: auto 0;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .panel h2 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .panel p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.15s ease;
+    }
+    .btn:active {
+      transform: scale(0.98);
+    }
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #06101d;
+    }
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 8px 12px;
+      font-size: 12px;
+      width: auto;
+      border-radius: 10px;
+    }
+
+    .room-code-box {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: var(--bg);
+      border: 1px dashed var(--accent);
+      text-align: center;
+    }
+    .room-code-box.visible {
+      display: block;
+    }
+    .room-code {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 6px;
+      color: var(--accent);
+      margin: 4px 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .status-text {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .join-row {
+      display: flex;
+      gap: 10px;
+    }
+    .code-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 4px;
+      padding: 12px;
+      outline: none;
+    }
+    .code-input:focus {
+      border-color: var(--accent);
+    }
+
+    .error-msg {
+      color: var(--lose);
+      font-size: 13px;
+      text-align: center;
+      min-height: 18px;
+      margin-top: 8px;
+    }
+
+    /* HUD JEU */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .score-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .score-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .score-num {
+      font-weight: 800;
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+    .score-you { color: var(--accent); }
+    .score-opp { color: #f472b6; }
+    .pot-badge {
+      background: var(--tie-bg);
+      color: var(--tie);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* BANNIÈRE DE TOUR */
+    .turn-banner {
+      margin: 10px 0;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .turn-banner.your-turn {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      color: #e0f2fe;
+    }
+    .turn-banner.win {
+      border-color: var(--win);
+      background: var(--win-bg);
+      color: #a7f3d0;
+    }
+    .turn-banner.lose {
+      border-color: var(--lose);
+      background: var(--lose-bg);
+      color: #fecaca;
+    }
+    .turn-banner.tie {
+      border-color: var(--tie);
+      background: var(--tie-bg);
+      color: #fde68a;
+    }
+
+    /* ZONE CENTRALE CARTES */
+    .arena {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .card {
+      background: linear-gradient(160deg, var(--surface) 0%, #0f1522 100%);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card-owner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .animal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .animal-emoji {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      flex-shrink: 0;
+    }
+    .animal-title h3 {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .animal-title span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .stats-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stat-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .stat-btn.selectable:hover,
+    .stat-btn.selectable:active {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.12);
+    }
+    .stat-btn:disabled {
+      cursor: default;
+    }
+    .stat-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .stat-val {
+      font-weight: 800;
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* États révélation */
+    .stat-btn.highlighted {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    .stat-btn.stat-win {
+      border-color: var(--win);
+      background: var(--win-bg);
+      color: #ecfdf5;
+    }
+    .stat-btn.stat-lose {
+      border-color: var(--lose);
+      background: var(--lose-bg);
+      color: #fef2f2;
+    }
+    .stat-btn.stat-tie {
+      border-color: var(--tie);
+      background: var(--tie-bg);
+      color: #fffbeb;
+    }
+
+    /* Carte adversaire compacte lors de la révélation */
+    .opp-card {
+      background: linear-gradient(160deg, #161d2e 0%, #0e131f 100%);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px 14px;
+      display: none;
+      animation: slideDown 0.25s ease;
+    }
+    .opp-card.visible {
+      display: block;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .opp-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .opp-animal {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .opp-stat-highlight {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ACTION BAS */
+    .footer-action {
+      margin-top: 10px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* FIN DE PARTIE */
+    .gameover-box {
+      margin: auto 0;
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px 20px;
+    }
+    .gameover-emoji {
+      font-size: 54px;
+      margin-bottom: 12px;
+    }
+    .gameover-box h2 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .gameover-box p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- ÉCRAN 1 : LOBBY -->
+    <section id="screen-lobby" class="screen active">
+      <div class="lobby-header">
+        <span class="badge">Duel 2 Joueurs</span>
+        <h1>Fauna Duel</h1>
+        <p class="subtitle">20 cartes chacun. Choisis la meilleure caractéristique pour rafler tout le paquet adverse.</p>
+      </div>
+
+      <div class="lobby-cards">
+        <div class="panel">
+          <h2>Créer une partie</h2>
+          <p>Génère un code à 4 chiffres et partage-le à ton adversaire.</p>
+          <button id="btn-create" class="btn btn-primary">Générer un code</button>
+          <div id="room-code-box" class="room-code-box">
+            <div class="status-text">Code de la salle</div>
+            <div id="display-room-code" class="room-code">----</div>
+            <div id="host-status" class="status-text">En attente du joueur 2...</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Rejoindre une partie</h2>
+          <p>Entre le code affiché sur l'écran de ton adversaire.</p>
+          <div class="join-row">
+            <input id="input-room-code" class="code-input" type="tel" maxlength="4" placeholder="0000" inputmode="numeric" />
+            <button id="btn-join" class="btn btn-secondary" style="width: auto; padding: 0 20px;">Rejoindre</button>
+          </div>
+        </div>
+
+        <div id="lobby-error" class="error-msg"></div>
+      </div>
+
+      <div style="text-align:center; font-size:11px; color:var(--muted);">
+        Astuce iPhone : Partager → Sur l'écran d'accueil
+      </div>
+    </section>
+
+    <!-- ÉCRAN 2 : JEU -->
+    <section id="screen-game" class="screen">
+      <div class="topbar">
+        <div class="score-pill">
+          <div class="score-item">
+            <span>Toi</span>
+            <span id="my-count" class="score-num score-you">20</span>
+          </div>
+          <span style="color:var(--border)">|</span>
+          <div class="score-item">
+            <span>Adv.</span>
+            <span id="opp-count" class="score-num score-opp">20</span>
+          </div>
+          <span id="pot-badge" class="pot-badge" style="display:none;">Pot: 0</span>
+        </div>
+        <button id="btn-cancel-game" class="btn btn-danger">Annuler</button>
+      </div>
+
+      <div id="turn-banner" class="turn-banner">Initialisation...</div>
+
+      <div class="arena">
+        <!-- Carte adversaire (visible pendant la confrontation) -->
+        <div id="opp-card" class="opp-card">
+          <div class="opp-top">
+            <div class="opp-animal">
+              <span id="opp-emoji" style="font-size:24px;">🦁</span>
+              <div>
+                <div id="opp-name">Lion</div>
+                <div id="opp-cat" style="font-size:11px; color:var(--muted); font-weight:500;">Mammifère</div>
+              </div>
+            </div>
+            <span style="font-size:11px; color:var(--muted); font-weight:700;">ADVERSAIRE</span>
+          </div>
+          <div id="opp-stat-box" class="opp-stat-highlight">
+            <span id="opp-stat-label">Poids</span>
+            <span id="opp-stat-value">190 kg</span>
+          </div>
+        </div>
+
+        <!-- Ta carte active -->
+        <div class="card">
+          <div class="card-owner">
+            <span>Ta carte du dessus</span>
+            <span id="card-index">Carte #1</span>
+          </div>
+
+          <div class="animal-header">
+            <div id="my-emoji" class="animal-emoji">🐘</div>
+            <div class="animal-title">
+              <h3 id="my-name">Éléphant d'Afrique</h3>
+              <span id="my-cat">Mammifère</span>
+            </div>
+          </div>
+
+          <div class="stats-list">
+            <button class="stat-btn" data-stat="weight">
+              <span class="stat-left">⚖️ Poids</span>
+              <span id="val-weight" class="stat-val">6000 kg</span>
+            </button>
+            <button class="stat-btn" data-stat="length">
+              <span class="stat-left">📏 Longueur</span>
+              <span id="val-length" class="stat-val">6.5 m</span>
+            </button>
+            <button class="stat-btn" data-stat="longevity">
+              <span class="stat-left">⏳ Longévité</span>
+              <span id="val-longevity" class="stat-val">70 ans</span>
+            </button>
+            <button class="stat-btn" data-stat="gestation">
+              <span class="stat-left">🥚 Gestation / Inc.</span>
+              <span id="val-gestation" class="stat-val">660 j</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-action">
+        <button id="btn-next-round" class="btn btn-primary" style="display:none;">Manche suivante</button>
+      </div>
+    </section>
+
+    <!-- ÉCRAN 3 : FIN DE PARTIE -->
+    <section id="screen-gameover" class="screen">
+      <div class="gameover-box">
+        <div id="end-emoji" class="gameover-emoji">🏆</div>
+        <h2 id="end-title">Victoire !</h2>
+        <p id="end-desc">Tu as remporté les 40 cartes du paquet.</p>
+        <button id="btn-back-lobby" class="btn btn-primary">Retour à l'accueil</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ==========================================
+    // BASE DE DONNÉES DE 40 ESPÈCES ANIMALES
+    // weight: kg | length: m | longevity: ans | gestation: jours
+    // ==========================================
+    const ANIMALS = [
+      { id: 1, name: "Baleine bleue", cat: "Mammifère marin", emoji: "🐋", weight: 140000, length: 27, longevity: 90, gestation: 335 },
+      { id: 2, name: "Éléphant d'Afrique", cat: "Mammifère", emoji: "🐘", weight: 6000, length: 6.5, longevity: 70, gestation: 660 },
+      { id: 3, name: "Girafe", cat: "Mammifère", emoji: "🦒", weight: 1200, length: 5.5, longevity: 25, gestation: 450 },
+      { id: 4, name: "Hippopotame", cat: "Mammifère", emoji: "🦛", weight: 1800, length: 4.2, longevity: 45, gestation: 240 },
+      { id: 5, name: "Rhinocéros blanc", cat: "Mammifère", emoji: "🦏", weight: 2300, length: 4.0, longevity: 50, gestation: 480 },
+      { id: 6, name: "Ours polaire", cat: "Mammifère", emoji: "🐻‍❄️", weight: 500, length: 2.6, longevity: 30, gestation: 240 },
+      { id: 7, name: "Tigre de Sibérie", cat: "Mammifère", emoji: "🐅", weight: 250, length: 3.1, longevity: 20, gestation: 105 },
+      { id: 8, name: "Lion d'Afrique", cat: "Mammifère", emoji: "🦁", weight: 190, length: 2.5, longevity: 16, gestation: 110 },
+      { id: 9, name: "Gorille des plaines", cat: "Mammifère", emoji: "🦍", weight: 170, length: 1.75, longevity: 40, gestation: 257 },
+      { id: 10, name: "Guépard", cat: "Mammifère", emoji: "🐆", weight: 55, length: 2.1, longevity: 14, gestation: 93 },
+      { id: 11, name: "Loup gris", cat: "Mammifère", emoji: "🐺", weight: 45, length: 1.5, longevity: 14, gestation: 63 },
+      { id: 12, name: "Kangourou roux", cat: "Marsupial", emoji: "🦘", weight: 85, length: 1.6, longevity: 22, gestation: 33 },
+      { id: 13, name: "Orque", cat: "Mammifère marin", emoji: "🐬", weight: 4500, length: 8.0, longevity: 60, gestation: 510 },
+      { id: 14, name: "Grand requin blanc", cat: "Poisson", emoji: "🦈", weight: 1100, length: 5.2, longevity: 70, gestation: 365 },
+      { id: 15, name: "Crocodile marin", cat: "Reptile", emoji: "🐊", weight: 700, length: 5.5, longevity: 70, gestation: 85 },
+      { id: 16, name: "Tortue géante des Galápagos", cat: "Reptile", emoji: "🐢", weight: 250, length: 1.5, longevity: 150, gestation: 130 },
+      { id: 17, name: "Anaconda vert", cat: "Reptile", emoji: "🐍", weight: 130, length: 6.5, longevity: 25, gestation: 180 },
+      { id: 18, name: "Dragon de Komodo", cat: "Reptile", emoji: "🦎", weight: 80, length: 2.8, longevity: 30, gestation: 240 },
+      { id: 19, name: "Autruche", cat: "Oiseau", emoji: "🦤", weight: 120, length: 2.4, longevity: 40, gestation: 42 },
+      { id: 20, name: "Manchot empereur", cat: "Oiseau", emoji: "🐧", weight: 35, length: 1.15, longevity: 20, gestation: 65 },
+      { id: 21, name: "Albatros hurleur", cat: "Oiseau", emoji: "🕊️", weight: 9, length: 1.35, longevity: 55, gestation: 78 },
+      { id: 22, name: "Aigle royal", cat: "Oiseau", emoji: "🦅", weight: 5.5, length: 0.9, longevity: 32, gestation: 43 },
+      { id: 23, name: "Flamant rose", cat: "Oiseau", emoji: "🦩", weight: 3.5, length: 1.4, longevity: 35, gestation: 29 },
+      { id: 24, name: "Ara macao", cat: "Oiseau", emoji: "🦜", weight: 1.1, length: 0.85, longevity: 50, gestation: 26 },
+      { id: 25, name: "Morse", cat: "Mammifère marin", emoji: "🦭", weight: 1200, length: 3.2, longevity: 40, gestation: 450 },
+      { id: 26, name: "Bison d'Amérique", cat: "Mammifère", emoji: "🦬", weight: 800, length: 3.0, longevity: 22, gestation: 285 },
+      { id: 27, name: "Chameau de Bactriane", cat: "Mammifère", emoji: "🐫", weight: 600, length: 3.0, longevity: 40, gestation: 390 },
+      { id: 28, name: "Zèbre de Grévy", cat: "Mammifère", emoji: "🦓", weight: 400, length: 2.5, longevity: 25, gestation: 390 },
+      { id: 29, name: "Panda géant", cat: "Mammifère", emoji: "🐼", weight: 115, length: 1.6, longevity: 25, gestation: 135 },
+      { id: 30, name: "Orang-outan", cat: "Mammifère", emoji: "🦧", weight: 75, length: 1.4, longevity: 45, gestation: 260 },
+      { id: 31, name: "Koala", cat: "Marsupial", emoji: "🐨", weight: 11, length: 0.75, longevity: 15, gestation: 35 },
+      { id: 32, name: "Castor d'Europe", cat: "Mammifère", emoji: "🦫", weight: 25, length: 1.1, longevity: 18, gestation: 105 },
+      { id: 33, name: "Renard roux", cat: "Mammifère", emoji: "🦊", weight: 7, length: 1.0, longevity: 10, gestation: 52 },
+      { id: 34, name: "Hérisson d'Europe", cat: "Mammifère", emoji: "🦔", weight: 1.0, length: 0.28, longevity: 7, gestation: 35 },
+      { id: 35, name: "Chauve-souris renard volant", cat: "Mammifère", emoji: "🦇", weight: 1.2, length: 0.4, longevity: 20, gestation: 150 },
+      { id: 36, name: "Raie manta géante", cat: "Poisson", emoji: "🐟", weight: 1600, length: 4.5, longevity: 40, gestation: 365 },
+      { id: 37, name: "Pieuvre géante du Pacifique", cat: "Mollusque", emoji: "🐙", weight: 50, length: 4.3, longevity: 4, gestation: 180 },
+      { id: 38, name: "Crabe-araignée géant", cat: "Crustacé", emoji: "🦀", weight: 19, length: 0.4, longevity: 60, gestation: 14 },
+      { id: 39, name: "Salamandre géante", cat: "Amphibien", emoji: "🦎", weight: 30, length: 1.5, longevity: 55, gestation: 50 },
+      { id: 40, name: "Ornithorynque", cat: "Monotrème", emoji: "🦆", weight: 1.8, length: 0.5, longevity: 17, gestation: 10 }
+    ];
+
+    const STAT_META = {
+      weight:    { label: "Poids", unit: "kg", fmt: v => v >= 1000 ? (v / 1000).toLocaleString("fr-FR") + " t" : v + " kg" },
+      length:    { label: "Longueur", unit: "m", fmt: v => v.toLocaleString("fr-FR") + " m" },
+      longevity: { label: "Longévité", unit: "ans", fmt: v => v + " ans" },
+      gestation: { label: "Gestation / Inc.", unit: "j", fmt: v => v + " j" }
+    };
+
+    // ==========================================
+    // ÉTAT DU JEU
+    // ==========================================
+    let peer = null;
+    let conn = null;
+    let isHost = false;
+
+    let state = {
+      myDeck: [],
+      oppDeck: [],
+      pot: [],
+      isMyTurn: false,
+      phase: "idle", // "choosing" | "revealed" | "ended"
+      selectedStat: null,
+      readyForNext: { me: false, opp: false }
+    };
+
+    // ==========================================
+    // ÉLÉMENTS DOM
+    // ==========================================
+    const screens = {
+      lobby: document.getElementById("screen-lobby"),
+      game: document.getElementById("screen-game"),
+      gameover: document.getElementById("screen-gameover")
+    };
+
+    const btnCreate = document.getElementById("btn-create");
+    const btnJoin = document.getElementById("btn-join");
+    const inputRoomCode = document.getElementById("input-room-code");
+    const roomCodeBox = document.getElementById("room-code-box");
+    const displayRoomCode = document.getElementById("display-room-code");
+    const hostStatus = document.getElementById("host-status");
+    const lobbyError = document.getElementById("lobby-error");
+
+    const myCountEl = document.getElementById("my-count");
+    const oppCountEl = document.getElementById("opp-count");
+    const potBadgeEl = document.getElementById("pot-badge");
+    const turnBannerEl = document.getElementById("turn-banner");
+
+    const oppCardEl = document.getElementById("opp-card");
+    const oppEmojiEl = document.getElementById("opp-emoji");
+    const oppNameEl = document.getElementById("opp-name");
+    const oppCatEl = document.getElementById("opp-cat");
+    const oppStatBoxEl = document.getElementById("opp-stat-box");
+    const oppStatLabelEl = document.getElementById("opp-stat-label");
+    const oppStatValueEl = document.getElementById("opp-stat-value");
+
+    const myEmojiEl = document.getElementById("my-emoji");
+    const myNameEl = document.getElementById("my-name");
+    const myCatEl = document.getElementById("my-cat");
+    const statButtons = document.querySelectorAll(".stat-btn");
+    const btnNextRound = document.getElementById("btn-next-round");
+    const btnCancelGame = document.getElementById("btn-cancel-game");
+    const btnBackLobby = document.getElementById("btn-back-lobby");
+
+    function showScreen(name) {
+      Object.values(screens).forEach(s => s.classList.remove("active"));
+      screens[name].classList.add("active");
+    }
+
+    function setError(msg) {
+      lobbyError.textContent = msg || "";
+    }
+
+    // ==========================================
+    // CONNEXION PEER-TO-PEER (PEERJS)
+    // ==========================================
+    const ROOM_PREFIX = "fauna-duel-v1-";
+
+    function generateRoomCode() {
+      return Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    btnCreate.addEventListener("click", () => {
+      setError("");
+      btnCreate.disabled = true;
+      isHost = true;
+      const code = generateRoomCode();
+      displayRoomCode.textContent = code;
+      roomCodeBox.classList.add("visible");
+      hostStatus.textContent = "Connexion au réseau...";
+
+      peer = new Peer(ROOM_PREFIX + code);
+
+      peer.on("open", () => {
+        hostStatus.textContent = "En attente du joueur 2...";
+      });
+
+      peer.on("connection", (connection) => {
+        if (conn) {
+          connection.close();
+          return;
+        }
+        conn = connection;
+        setupConnectionHandlers();
+      });
+
+      peer.on("error", (err) => {
+        setError("Erreur réseau : " + err.type + ". Réessaie.");
+        btnCreate.disabled = false;
+        roomCodeBox.classList.remove("visible");
+      });
+    });
+
+    btnJoin.addEventListener("click", () => {
+      setError("");
+      const code = inputRoomCode.value.trim();
+      if (!/^\d{4}$/.test(code)) {
+        setError("Entre un code valide à 4 chiffres.");
+        return;
+      }
+
+      btnJoin.disabled = true;
+      isHost = false;
+      peer = new Peer();
+
+      peer.on("open", () => {
+        conn = peer.connect(ROOM_PREFIX + code, { reliable: true });
+        setupConnectionHandlers();
+      });
+
+      peer.on("error", (err) => {
+        setError("Salle introuvable ou code expiré.");
+        btnJoin.disabled = false;
+      });
+    });
+
+    function setupConnectionHandlers() {
+      conn.on("open", () => {
+        if (isHost) {
+          startNewMatchAsHost();
+        }
+      });
+
+      conn.on("data", (data) => {
+        handleMessage(data);
+      });
+
+      conn.on("close", () => {
+        if (state.phase !== "ended") {
+          endGame("cancelled", "L'adversaire a quitté ou annulé la partie.");
+        }
+      });
+    }
+
+    function send(payload) {
+      if (conn && conn.open) {
+        conn.send(payload);
+      }
+    }
+
+    // ==========================================
+    // LOGIQUE DU JEU
+    // ==========================================
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function startNewMatchAsHost() {
+      const shuffled = shuffle(ANIMALS);
+      const hostDeck = shuffled.slice(0, 20);
+      const guestDeck = shuffled.slice(20, 40);
+      const hostStarts = Math.random() < 0.5;
+
+      // Envoi de la configuration initiale à l'invité
+      send({
+        type: "INIT_GAME",
+        yourDeck: guestDeck,
+        oppDeck: hostDeck,
+        yourTurn: !hostStarts
+      });
+
+      initGameState(hostDeck, guestDeck, hostStarts);
+    }
+
+    function initGameState(myDeck, oppDeck, isMyTurn) {
+      state = {
+        myDeck,
+        oppDeck,
+        pot: [],
+        isMyTurn,
+        phase: "choosing",
+        selectedStat: null,
+        readyForNext: { me: false, opp: false }
+      };
+      showScreen("game");
+      renderChoosingPhase();
+    }
+
+    function handleMessage(msg) {
+      switch (msg.type) {
+        case "INIT_GAME":
+          initGameState(msg.yourDeck, msg.oppDeck, msg.yourTurn);
+          break;
+
+        case "SELECT_STAT":
+          if (state.phase === "choosing" && !state.isMyTurn) {
+            resolveRound(msg.stat);
+          }
+          break;
+
+        case "NEXT_ROUND_READY":
+          state.readyForNext.opp = true;
+          checkBothReadyForNext();
+          break;
+
+        case "CANCEL_GAME":
+          endGame("cancelled", "La partie a été annulée par ton adversaire.");
+          break;
+      }
+    }
+
+    // Sélection d'une statistique par le joueur actif
+    statButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (state.phase !== "choosing" || !state.isMyTurn) return;
+        const stat = btn.dataset.stat;
+        send({ type: "SELECT_STAT", stat });
+        resolveRound(stat);
+      });
+    });
+
+    function resolveRound(stat) {
+      state.phase = "revealed";
+      state.selectedStat = stat;
+      state.readyForNext = { me: false, opp: false };
+
+      const myCard = state.myDeck[0];
+      const oppCard = state.oppDeck[0];
+      const myVal = myCard[stat];
+      const oppVal = oppCard[stat];
+
+      let outcome = "tie"; // "win" | "lose" | "tie"
+      if (myVal > oppVal) outcome = "win";
+      else if (myVal < oppVal) outcome = "lose";
+
+      // Affichage de la carte adverse et mise en valeur
+      oppCardEl.classList.add("visible");
+      oppEmojiEl.textContent = oppCard.emoji;
+      oppNameEl.textContent = oppCard.name;
+      oppCatEl.textContent = oppCard.cat;
+
+      const meta = STAT_META[stat];
+      oppStatLabelEl.textContent = meta.label;
+      oppStatValueEl.textContent = meta.fmt(oppVal);
+
+      // Reset classes visuelles
+      oppStatBoxEl.className = "opp-stat-highlight";
+      statButtons.forEach(b => {
+        b.disabled = true;
+        b.classList.remove("selectable", "highlighted", "stat-win", "stat-lose", "stat-tie");
+      });
+
+      const myStatBtn = document.querySelector(`.stat-btn[data-stat="${stat}"]`);
+
+      if (outcome === "win") {
+        myStatBtn.classList.add("stat-win");
+        oppStatBoxEl.classList.add("stat-lose");
+        turnBannerEl.className = "turn-banner win";
+        turnBannerEl.textContent = `Manche gagnée ! (${meta.fmt(myVal)} vs ${meta.fmt(oppVal)})`;
+      } else if (outcome === "lose") {
+        myStatBtn.classList.add("stat-lose");
+        oppStatBoxEl.classList.add("stat-win");
+        turnBannerEl.className = "turn-banner lose";
+        turnBannerEl.textContent = `Manche perdue (${meta.fmt(myVal)} vs ${meta.fmt(oppVal)})`;
+      } else {
+        myStatBtn.classList.add("stat-tie");
+        oppStatBoxEl.classList.add("stat-tie");
+        turnBannerEl.className = "turn-banner tie";
+        turnBannerEl.textContent = `Égalité parfaite (${meta.fmt(myVal)}) ! Cartes mises en jeu.`;
+      }
+
+      // Mise à jour des paquets
+      const playedMyCard = state.myDeck.shift();
+      const playedOppCard = state.oppDeck.shift();
+      const wonCards = [...state.pot, playedMyCard, playedOppCard];
+
+      if (outcome === "win") {
+        state.myDeck.push(...wonCards);
+        state.pot = [];
+        state.isMyTurn = true;
+      } else if (outcome === "lose") {
+        state.oppDeck.push(...wonCards);
+        state.pot = [];
+        state.isMyTurn = false;
+      } else {
+        // En cas d'égalité, les cartes vont dans le pot et le même joueur rejoue
+        state.pot = wonCards;
+      }
+
+      updateCounters();
+
+      btnNextRound.style.display = "block";
+      btnNextRound.disabled = false;
+      btnNextRound.textContent = (state.myDeck.length === 0 || state.oppDeck.length === 0)
+        ? "Voir le résultat final"
+        : "Manche suivante";
+    }
+
+    btnNextRound.addEventListener("click", () => {
+      state.readyForNext.me = true;
+      btnNextRound.disabled = true;
+      btnNextRound.textContent = "En attente de l'adversaire...";
+      send({ type: "NEXT_ROUND_READY" });
+      checkBothReadyForNext();
+    });
+
+    function checkBothReadyForNext() {
+      if (!state.readyForNext.me || !state.readyForNext.opp) return;
+
+      // Vérification de fin de partie
+      if (state.myDeck.length === 0) {
+        endGame("lose", "Tu n'as plus aucune carte en main.");
+        return;
+      }
+      if (state.oppDeck.length === 0) {
+        endGame("win", "Tu as remporté toutes les cartes de ton adversaire !");
+        return;
+      }
+
+      state.phase = "choosing";
+      state.selectedStat = null;
+      renderChoosingPhase();
+    }
+
+    function renderChoosingPhase() {
+      updateCounters();
+      oppCardEl.classList.remove("visible");
+      btnNextRound.style.display = "none";
+
+      const currentCard = state.myDeck[0];
+      myEmojiEl.textContent = currentCard.emoji;
+      myNameEl.textContent = currentCard.name;
+      myCatEl.textContent = currentCard.cat;
+
+      document.getElementById("val-weight").textContent = STAT_META.weight.fmt(currentCard.weight);
+      document.getElementById("val-length").textContent = STAT_META.length.fmt(currentCard.length);
+      document.getElementById("val-longevity").textContent = STAT_META.longevity.fmt(currentCard.longevity);
+      document.getElementById("val-gestation").textContent = STAT_META.gestation.fmt(currentCard.gestation);
+
+      statButtons.forEach(btn => {
+        btn.classList.remove("highlighted", "stat-win", "stat-lose", "stat-tie", "selectable");
+        if (state.isMyTurn) {
+          btn.disabled = false;
+          btn.classList.add("selectable");
+        } else {
+          btn.disabled = true;
+        }
+      });
+
+      if (state.isMyTurn) {
+        turnBannerEl.className = "turn-banner your-turn";
+        turnBannerEl.textContent = "À toi de jouer ! Choisis une caractéristique.";
+      } else {
+        turnBannerEl.className = "turn-banner";
+        turnBannerEl.textContent = "Tour de l'adversaire... Il choisit sa caractéristique.";
+      }
+    }
+
+    function updateCounters() {
+      myCountEl.textContent = state.myDeck.length;
+      oppCountEl.textContent = state.oppDeck.length;
+      if (state.pot.length > 0) {
+        potBadgeEl.style.display = "inline-block";
+        potBadgeEl.textContent = `Pot: ${state.pot.length}`;
+      } else {
+        potBadgeEl.style.display = "none";
+      }
+    }
+
+    // ==========================================
+    // ANNULATION ET FIN DE PARTIE
+    // ==========================================
+    btnCancelGame.addEventListener("click", () => {
+      send({ type: "CANCEL_GAME" });
+      endGame("cancelled", "Tu as annulé la partie.");
+    });
+
+    function endGame(result, description) {
+      state.phase = "ended";
+      const emojiEl = document.getElementById("end-emoji");
+      const titleEl = document.getElementById("end-title");
+      const descEl = document.getElementById("end-desc");
+
+      if (result === "win") {
+        emojiEl.textContent = "🏆";
+        titleEl.textContent = "Victoire !";
+      } else if (result === "lose") {
+        emojiEl.textContent = "💀";
+        titleEl.textContent = "Défaite";
+      } else {
+        emojiEl.textContent = "🏳️";
+        titleEl.textContent = "Partie annulée";
+      }
+
+      descEl.textContent = description;
+      showScreen("gameover");
+    }
+
+    btnBackLobby.addEventListener("click", () => {
+      if (conn) { conn.close(); conn = null; }
+      if (peer) { peer.destroy(); peer = null; }
+      btnCreate.disabled = false;
+      btnJoin.disabled = false;
+      roomCodeBox.classList.remove("visible");
+      inputRoomCode.value = "";
+      setError("");
+      showScreen("lobby");
+    });
+  </script>
+</body>
+</html>
