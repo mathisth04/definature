@@ -49,7 +49,7 @@
       height: 100dvh;
       max-width: 480px;
       margin: 0 auto;
-      padding: calc(env(safe-area-inset-top, 12px) + 8px) 14px calc(env(safe-area-inset-bottom, 12px) + 10px);
+      padding: calc(env(safe-area-inset-top, 12px) + 6px) 14px calc(env(safe-area-inset-bottom, 12px) + 8px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -120,7 +120,7 @@
 
     .btn {
       width: 100%;
-      padding: 13px 15px;
+      padding: 12px 15px;
       border-radius: 14px;
       border: none;
       font-size: 15px;
@@ -140,7 +140,7 @@
       background: rgba(239, 68, 68, 0.15);
       color: #fca5a5;
       border: 1px solid rgba(239, 68, 68, 0.3);
-      padding: 8px 12px;
+      padding: 7px 11px;
       font-size: 12px;
       width: auto;
       border-radius: 10px;
@@ -167,7 +167,6 @@
     }
     .status-text { font-size: 12px; color: var(--muted); }
 
-    /* Correction overflow mobile sur Rejoindre */
     .join-row {
       display: flex;
       align-items: stretch;
@@ -219,8 +218,8 @@
       gap: 8px;
       background: var(--surface);
       border: 1px solid var(--border);
-      padding: 7px 11px;
-      border-radius: 14px;
+      padding: 6px 10px;
+      border-radius: 13px;
       font-size: 12px;
       font-weight: 600;
     }
@@ -239,8 +238,8 @@
     }
 
     .turn-banner {
-      margin: 8px 0;
-      padding: 8px 12px;
+      margin: 6px 0;
+      padding: 7px 12px;
       border-radius: 12px;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -276,7 +275,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 8px;
+      gap: 7px;
       min-height: 0;
     }
 
@@ -284,10 +283,10 @@
       background: linear-gradient(160deg, var(--surface) 0%, #0f1522 100%);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 12px;
+      padding: 11px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     }
 
@@ -295,20 +294,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.7px;
       color: var(--muted);
       font-weight: 700;
     }
 
-    /* Grande image panoramique sur la carte active */
+    /* Grande image vue en entier */
     .hero-photo-wrap {
       position: relative;
       width: 100%;
-      height: 136px;
+      height: 190px;
       border-radius: 15px;
-      background: var(--surface-2);
+      background: #080c14;
       border: 1px solid var(--border);
       overflow: hidden;
       display: flex;
@@ -319,7 +318,7 @@
     .animal-photo {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       display: block;
     }
     .animal-photo.hidden-img {
@@ -339,7 +338,7 @@
       padding: 0 2px;
     }
     .animal-title h3 {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       line-height: 1.2;
     }
@@ -352,7 +351,7 @@
     .stats-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
 
     .stat-btn {
@@ -360,8 +359,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 13px;
-      border-radius: 13px;
+      padding: 9px 12px;
+      border-radius: 12px;
       background: var(--surface-2);
       border: 1px solid var(--border);
       color: var(--text);
@@ -409,7 +408,7 @@
       background: linear-gradient(160deg, #161d2e 0%, #0e131f 100%);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 10px 12px;
+      padding: 9px 12px;
       display: none;
       animation: slideDown 0.25s ease;
     }
@@ -422,7 +421,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 7px;
+      margin-bottom: 6px;
     }
     .opp-animal {
       display: flex;
@@ -432,10 +431,10 @@
       font-size: 14px;
     }
     .opp-photo-wrap {
-      width: 52px;
-      height: 52px;
+      width: 64px;
+      height: 64px;
       border-radius: 12px;
-      background: var(--surface-2);
+      background: #080c14;
       border: 1px solid var(--border);
       overflow: hidden;
       flex-shrink: 0;
@@ -447,15 +446,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 11px;
       font-size: 13px;
       font-weight: 700;
     }
 
     .footer-action {
-      margin-top: 8px;
-      min-height: 46px;
+      margin-top: 7px;
+      min-height: 44px;
       display: flex;
       align-items: center;
     }
@@ -604,66 +603,104 @@
   </div>
 
   <script>
-    const IMAGE_MODE = "wiki";
-    const wikiCache = new Map();
+    // ==========================================
+    // RÉCUPÉRATION FIABLE DES PHOTOS D'ANIMAUX
+    // Utilise Wikimedia Commons + filtre cartes/drapeaux/SVG
+    // ==========================================
+    const IMAGE_MODE = "commons"; // "commons" (auto) ou "local" (./images/<id>.jpg)
+    const imageCache = new Map();
 
-    const ANIMALS = [
-      { id: 1, name: "Baleine bleue", wiki: "Baleine bleue", cat: "Mammifère marin", weight: 140000, length: 27, longevity: 90, gestation: 335 },
-      { id: 2, name: "Éléphant d'Afrique", wiki: "Éléphant de savane d'Afrique", cat: "Mammifère", weight: 6000, length: 6.5, longevity: 70, gestation: 660 },
-      { id: 3, name: "Girafe", wiki: "Girafe", cat: "Mammifère", weight: 1200, length: 5.5, longevity: 25, gestation: 450 },
-      { id: 4, name: "Hippopotame", wiki: "Hippopotame amphibie", cat: "Mammifère", weight: 1800, length: 4.2, longevity: 45, gestation: 240 },
-      { id: 5, name: "Rhinocéros blanc", wiki: "Rhinocéros blanc", cat: "Mammifère", weight: 2300, length: 4.0, longevity: 50, gestation: 480 },
-      { id: 6, name: "Ours polaire", wiki: "Ours polaire", cat: "Mammifère", weight: 500, length: 2.6, longevity: 30, gestation: 240 },
-      { id: 7, name: "Tigre de Sibérie", wiki: "Tigre de Sibérie", cat: "Mammifère", weight: 250, length: 3.1, longevity: 20, gestation: 105 },
-      { id: 8, name: "Lion d'Afrique", wiki: "Lion", cat: "Mammifère", weight: 190, length: 2.5, longevity: 16, gestation: 110 },
-      { id: 9, name: "Gorille des plaines", wiki: "Gorille des plaines", cat: "Mammifère", weight: 170, length: 1.75, longevity: 40, gestation: 257 },
-      { id: 10, name: "Guépard", wiki: "Guépard", cat: "Mammifère", weight: 55, length: 2.1, longevity: 14, gestation: 93 },
-      { id: 11, name: "Loup gris", wiki: "Loup gris", cat: "Mammifère", weight: 45, length: 1.5, longevity: 14, gestation: 63 },
-      { id: 12, name: "Kangourou roux", wiki: "Kangourou roux", cat: "Marsupial", weight: 85, length: 1.6, longevity: 22, gestation: 33 },
-      { id: 13, name: "Orque", wiki: "Orque", cat: "Mammifère marin", weight: 4500, length: 8.0, longevity: 60, gestation: 510 },
-      { id: 14, name: "Grand requin blanc", wiki: "Grand Requin blanc", cat: "Poisson", weight: 1100, length: 5.2, longevity: 70, gestation: 365 },
-      { id: 15, name: "Crocodile marin", wiki: "Crocodile marin", cat: "Reptile", weight: 700, length: 5.5, longevity: 70, gestation: 85 },
-      { id: 16, name: "Tortue géante des Galápagos", wiki: "Tortue géante des Galápagos", cat: "Reptile", weight: 250, length: 1.5, longevity: 150, gestation: 130 },
-      { id: 17, name: "Anaconda vert", wiki: "Anaconda vert", cat: "Reptile", weight: 130, length: 6.5, longevity: 25, gestation: 180 },
-      { id: 18, name: "Dragon de Komodo", wiki: "Dragon de Komodo", cat: "Reptile", weight: 80, length: 2.8, longevity: 30, gestation: 240 },
-      { id: 19, name: "Autruche", wiki: "Autruche d'Afrique", cat: "Oiseau", weight: 120, length: 2.4, longevity: 40, gestation: 42 },
-      { id: 20, name: "Manchot empereur", wiki: "Manchot empereur", cat: "Oiseau", weight: 35, length: 1.15, longevity: 20, gestation: 65 },
-      { id: 21, name: "Albatros hurleur", wiki: "Albatros hurleur", cat: "Oiseau", weight: 9, length: 1.35, longevity: 55, gestation: 78 },
-      { id: 22, name: "Aigle royal", wiki: "Aigle royal", cat: "Oiseau", weight: 5.5, length: 0.9, longevity: 32, gestation: 43 },
-      { id: 23, name: "Flamant rose", wiki: "Flamant rose", cat: "Oiseau", weight: 3.5, length: 1.4, longevity: 35, gestation: 29 },
-      { id: 24, name: "Ara macao", wiki: "Ara rouge", cat: "Oiseau", weight: 1.1, length: 0.85, longevity: 50, gestation: 26 },
-      { id: 25, name: "Morse", wiki: "Morse", cat: "Mammifère marin", weight: 1200, length: 3.2, longevity: 40, gestation: 450 },
-      { id: 26, name: "Bison d'Amérique", wiki: "Bison d'Amérique", cat: "Mammifère", weight: 800, length: 3.0, longevity: 22, gestation: 285 },
-      { id: 27, name: "Chameau de Bactriane", wiki: "Chameau de Bactriane", cat: "Mammifère", weight: 600, length: 3.0, longevity: 40, gestation: 390 },
-      { id: 28, name: "Zèbre de Grévy", wiki: "Zèbre de Grévy", cat: "Mammifère", weight: 400, length: 2.5, longevity: 25, gestation: 390 },
-      { id: 29, name: "Panda géant", wiki: "Panda géant", cat: "Mammifère", weight: 115, length: 1.6, longevity: 25, gestation: 135 },
-      { id: 30, name: "Orang-outan", wiki: "Orang-outan", cat: "Mammifère", weight: 75, length: 1.4, longevity: 45, gestation: 260 },
-      { id: 31, name: "Koala", wiki: "Koala", cat: "Marsupial", weight: 11, length: 0.75, longevity: 15, gestation: 35 },
-      { id: 32, name: "Castor d'Europe", wiki: "Castor d'Europe", cat: "Mammifère", weight: 25, length: 1.1, longevity: 18, gestation: 105 },
-      { id: 33, name: "Renard roux", wiki: "Renard roux", cat: "Mammifère", weight: 7, length: 1.0, longevity: 10, gestation: 52 },
-      { id: 34, name: "Hérisson d'Europe", wiki: "Hérisson commun", cat: "Mammifère", weight: 1.0, length: 0.28, longevity: 7, gestation: 35 },
-      { id: 35, name: "Chauve-souris renard volant", wiki: "Pteropus", cat: "Mammifère", weight: 1.2, length: 0.4, longevity: 20, gestation: 150 },
-      { id: 36, name: "Raie manta géante", wiki: "Mobula birostris", cat: "Poisson", weight: 1600, length: 4.5, longevity: 40, gestation: 365 },
-      { id: 37, name: "Pieuvre géante du Pacifique", wiki: "Pieuvre géante du Pacifique", cat: "Mollusque", weight: 50, length: 4.3, longevity: 4, gestation: 180 },
-      { id: 38, name: "Crabe-araignée géant", wiki: "Macrocheira kaempferi", cat: "Crustacé", weight: 19, length: 0.4, longevity: 60, gestation: 14 },
-      { id: 39, name: "Salamandre géante", wiki: "Salamandre géante de Chine", cat: "Amphibien", weight: 30, length: 1.5, longevity: 55, gestation: 50 },
-      { id: 40, name: "Ornithorynque", wiki: "Ornithorynque", cat: "Monotrème", weight: 1.8, length: 0.5, longevity: 17, gestation: 10 }
+    const FORBIDDEN_URL_PARTS = [
+      "map", "flag", "coat_of_arms", "locator", "range", "distribution",
+      "svg", "diagram", "chart", "icon", "logo", "stamp", "skeleton"
     ];
 
-    async function fetchWikiImage(animal) {
-      if (wikiCache.has(animal.id)) return wikiCache.get(animal.id);
+    function isValidAnimalPhotoUrl(url) {
+      if (!url || typeof url !== "string") return false;
+      const lower = url.toLowerCase();
+      if (lower.endsWith(".svg")) return false;
+      return !FORBIDDEN_URL_PARTS.some(part => lower.includes(part));
+    }
+
+    const ANIMALS = [
+      { id: 1, name: "Baleine bleue", query: "Balaenoptera musculus whale", cat: "Mammifère marin", weight: 140000, length: 27, longevity: 90, gestation: 335 },
+      { id: 2, name: "Éléphant d'Afrique", query: "Loxodonta africana elephant", cat: "Mammifère", weight: 6000, length: 6.5, longevity: 70, gestation: 660 },
+      { id: 3, name: "Girafe", query: "Giraffa camelopardalis giraffe", cat: "Mammifère", weight: 1200, length: 5.5, longevity: 25, gestation: 450 },
+      { id: 4, name: "Hippopotame", query: "Hippopotamus amphibius", cat: "Mammifère", weight: 1800, length: 4.2, longevity: 45, gestation: 240 },
+      { id: 5, name: "Rhinocéros blanc", query: "Ceratotherium simum white rhinoceros", cat: "Mammifère", weight: 2300, length: 4.0, longevity: 50, gestation: 480 },
+      { id: 6, name: "Ours polaire", query: "Ursus maritimus polar bear", cat: "Mammifère", weight: 500, length: 2.6, longevity: 30, gestation: 240 },
+      { id: 7, name: "Tigre de Sibérie", query: "Panthera tigris altaica tiger", cat: "Mammifère", weight: 250, length: 3.1, longevity: 20, gestation: 105 },
+      { id: 8, name: "Lion d'Afrique", query: "Panthera leo lion", cat: "Mammifère", weight: 190, length: 2.5, longevity: 16, gestation: 110 },
+      { id: 9, name: "Gorille des plaines", query: "Gorilla gorilla", cat: "Mammifère", weight: 170, length: 1.75, longevity: 40, gestation: 257 },
+      { id: 10, name: "Guépard", query: "Acinonyx jubatus cheetah", cat: "Mammifère", weight: 55, length: 2.1, longevity: 14, gestation: 93 },
+      { id: 11, name: "Loup gris", query: "Canis lupus grey wolf", cat: "Mammifère", weight: 45, length: 1.5, longevity: 14, gestation: 63 },
+      { id: 12, name: "Kangourou roux", query: "Osphranter rufus red kangaroo", cat: "Marsupial", weight: 85, length: 1.6, longevity: 22, gestation: 33 },
+      { id: 13, name: "Orque", query: "Orcinus orca killer whale", cat: "Mammifère marin", weight: 4500, length: 8.0, longevity: 60, gestation: 510 },
+      { id: 14, name: "Grand requin blanc", query: "Carcharodon carcharias great white shark", cat: "Poisson", weight: 1100, length: 5.2, longevity: 70, gestation: 365 },
+      { id: 15, name: "Crocodile marin", query: "Crocodylus porosus saltwater crocodile", cat: "Reptile", weight: 700, length: 5.5, longevity: 70, gestation: 85 },
+      { id: 16, name: "Tortue géante des Galápagos", query: "Chelonoidis nigra giant tortoise", cat: "Reptile", weight: 250, length: 1.5, longevity: 150, gestation: 130 },
+      { id: 17, name: "Anaconda vert", query: "Eunectes murinus green anaconda", cat: "Reptile", weight: 130, length: 6.5, longevity: 25, gestation: 180 },
+      { id: 18, name: "Dragon de Komodo", query: "Varanus komodoensis komodo dragon", cat: "Reptile", weight: 80, length: 2.8, longevity: 30, gestation: 240 },
+      { id: 19, name: "Autruche", query: "Struthio camelus ostrich bird", cat: "Oiseau", weight: 120, length: 2.4, longevity: 40, gestation: 42 },
+      { id: 20, name: "Manchot empereur", query: "Aptenodytes forsteri emperor penguin", cat: "Oiseau", weight: 35, length: 1.15, longevity: 20, gestation: 65 },
+      { id: 21, name: "Albatros hurleur", query: "Diomedea exulans wandering albatross", cat: "Oiseau", weight: 9, length: 1.35, longevity: 55, gestation: 78 },
+      { id: 22, name: "Aigle royal", query: "Aquila chrysaetos golden eagle", cat: "Oiseau", weight: 5.5, length: 0.9, longevity: 32, gestation: 43 },
+      { id: 23, name: "Flamant rose", query: "Phoenicopterus roseus flamingo", cat: "Oiseau", weight: 3.5, length: 1.4, longevity: 35, gestation: 29 },
+      { id: 24, name: "Ara macao", query: "Ara macao scarlet macaw", cat: "Oiseau", weight: 1.1, length: 0.85, longevity: 50, gestation: 26 },
+      { id: 25, name: "Morse", query: "Odobenus rosmarus walrus", cat: "Mammifère marin", weight: 1200, length: 3.2, longevity: 40, gestation: 450 },
+      { id: 26, name: "Bison d'Amérique", query: "Bison bison american bison", cat: "Mammifère", weight: 800, length: 3.0, longevity: 22, gestation: 285 },
+      { id: 27, name: "Chameau de Bactriane", query: "Camelus bactrianus camel", cat: "Mammifère", weight: 600, length: 3.0, longevity: 40, gestation: 390 },
+      { id: 28, name: "Zèbre de Grévy", query: "Equus grevyi zebra", cat: "Mammifère", weight: 400, length: 2.5, longevity: 25, gestation: 390 },
+      { id: 29, name: "Panda géant", query: "Ailuropoda melanoleuca giant panda", cat: "Mammifère", weight: 115, length: 1.6, longevity: 25, gestation: 135 },
+      { id: 30, name: "Orang-outan", query: "Pongo pygmaeus orangutan", cat: "Mammifère", weight: 75, length: 1.4, longevity: 45, gestation: 260 },
+      { id: 31, name: "Koala", query: "Phascolarctos cinereus koala", cat: "Marsupial", weight: 11, length: 0.75, longevity: 15, gestation: 35 },
+      { id: 32, name: "Castor d'Europe", query: "Castor fiber european beaver", cat: "Mammifère", weight: 25, length: 1.1, longevity: 18, gestation: 105 },
+      { id: 33, name: "Renard roux", query: "Vulpes vulpes red fox", cat: "Mammifère", weight: 7, length: 1.0, longevity: 10, gestation: 52 },
+      { id: 34, name: "Hérisson d'Europe", query: "Erinaceus europaeus hedgehog", cat: "Mammifère", weight: 1.0, length: 0.28, longevity: 7, gestation: 35 },
+      { id: 35, name: "Chauve-souris renard volant", query: "Pteropus flying fox bat", cat: "Mammifère", weight: 1.2, length: 0.4, longevity: 20, gestation: 150 },
+      { id: 36, name: "Raie manta géante", query: "Mobula birostris manta ray", cat: "Poisson", weight: 1600, length: 4.5, longevity: 40, gestation: 365 },
+      { id: 37, name: "Pieuvre géante du Pacifique", query: "Enteroctopus dofleini octopus", cat: "Mollusque", weight: 50, length: 4.3, longevity: 4, gestation: 180 },
+      { id: 38, name: "Crabe-araignée géant", query: "Macrocheira kaempferi crab", cat: "Crustacé", weight: 19, length: 0.4, longevity: 60, gestation: 14 },
+      { id: 39, name: "Salamandre géante", query: "Andrias davidianus salamander", cat: "Amphibien", weight: 30, length: 1.5, longevity: 55, gestation: 50 },
+      { id: 40, name: "Ornithorynque", query: "Ornithorhynchus anatinus platypus", cat: "Monotrème", weight: 1.8, length: 0.5, longevity: 17, gestation: 10 }
+    ];
+
+    async function fetchCommonsAnimalImage(animal) {
+      if (imageCache.has(animal.id)) return imageCache.get(animal.id);
+
       try {
-        const title = encodeURIComponent(animal.wiki);
-        const res = await fetch(`https://fr.wikipedia.org/api/rest_v1/page/summary/${title}`);
-        if (!res.ok) throw new Error("wiki fetch failed");
+        const params = new URLSearchParams({
+          action: "query",
+          format: "json",
+          origin: "*",
+          generator: "search",
+          gsrnamespace: "6", // Fichiers Wikimedia Commons
+          gsrsearch: `${animal.query} filetype:bitmap`,
+          gsrlimit: "6",
+          prop: "imageinfo",
+          iiprop: "url|thumburl",
+          iiurlwidth: "700"
+        });
+
+        const res = await fetch(`https://commons.wikimedia.org/w/api.php?${params.toString()}`);
+        if (!res.ok) throw new Error("commons fetch failed");
         const data = await res.json();
-        const url = data.thumbnail?.source || null;
-        wikiCache.set(animal.id, url);
-        return url;
+        const pages = data?.query?.pages ? Object.values(data.query.pages) : [];
+
+        for (const page of pages) {
+          const info = page?.imageinfo?.[0];
+          const candidate = info?.thumburl || info?.url;
+          if (isValidAnimalPhotoUrl(candidate)) {
+            imageCache.set(animal.id, candidate);
+            return candidate;
+          }
+        }
       } catch {
-        wikiCache.set(animal.id, null);
-        return null;
+        // Ignore network/API error
       }
+
+      imageCache.set(animal.id, null);
+      return null;
     }
 
     async function setAnimalVisual(animal, imgEl, fallbackEl) {
@@ -674,7 +711,7 @@
 
       const url = IMAGE_MODE === "local"
         ? `./images/${animal.id}.jpg`
-        : await fetchWikiImage(animal);
+        : await fetchCommonsAnimalImage(animal);
 
       if (!url) return;
 
@@ -695,7 +732,7 @@
         const pre = new Image();
         pre.src = `./images/${animal.id}.jpg`;
       } else {
-        fetchWikiImage(animal).then(url => {
+        fetchCommonsAnimalImage(animal).then(url => {
           if (url) {
             const pre = new Image();
             pre.src = url;
