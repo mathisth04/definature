@@ -67,11 +67,12 @@
     /* LOBBY */
     .lobby-header {
       text-align: center;
-      margin-top: 10px;
+      margin-top: 6px;
+      flex-shrink: 0;
     }
     .badge {
       display: inline-block;
-      padding: 4px 12px;
+      padding: 4px 11px;
       border-radius: 999px;
       background: var(--surface-2);
       border: 1px solid var(--border);
@@ -80,42 +81,73 @@
       font-weight: 700;
       letter-spacing: 0.6px;
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
     h1 {
-      font-size: 28px;
+      font-size: 25px;
       font-weight: 800;
       letter-spacing: -0.5px;
     }
     .subtitle {
       color: var(--muted);
-      font-size: 13px;
-      margin-top: 5px;
-      line-height: 1.35;
+      font-size: 12px;
+      margin-top: 3px;
+      line-height: 1.3;
     }
 
-    .lobby-cards {
+    .lobby-body {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin: auto 0;
+      gap: 10px;
+      padding: 8px 0;
+      -webkit-overflow-scrolling: touch;
     }
 
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 13px 14px;
+      flex-shrink: 0;
     }
     .panel h2 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       margin-bottom: 4px;
     }
     .panel p {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+    }
+
+    .deck-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .deck-select {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .deck-select:focus {
+      border-color: var(--accent);
     }
 
     .btn {
@@ -123,7 +155,7 @@
       padding: 12px 15px;
       border-radius: 14px;
       border: none;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       transition: transform 0.12s ease, opacity 0.15s ease;
@@ -149,8 +181,8 @@
 
     .room-code-box {
       display: none;
-      margin-top: 12px;
-      padding: 12px;
+      margin-top: 10px;
+      padding: 10px;
       border-radius: 14px;
       background: var(--bg);
       border: 1px dashed var(--accent);
@@ -158,11 +190,11 @@
     }
     .room-code-box.visible { display: block; }
     .room-code {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 800;
       letter-spacing: 5px;
       color: var(--accent);
-      margin: 4px 0;
+      margin: 2px 0;
       font-variant-numeric: tabular-nums;
     }
     .status-text { font-size: 12px; color: var(--muted); }
@@ -186,7 +218,7 @@
       font-weight: 700;
       text-align: center;
       letter-spacing: 3px;
-      padding: 11px 10px;
+      padding: 10px;
       outline: none;
     }
     .code-input:focus { border-color: var(--accent); }
@@ -199,10 +231,9 @@
 
     .error-msg {
       color: var(--lose);
-      font-size: 13px;
+      font-size: 12px;
       text-align: center;
-      min-height: 18px;
-      margin-top: 6px;
+      min-height: 16px;
     }
 
     /* HUD JEU */
@@ -210,20 +241,30 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
     }
     .score-pill {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       background: var(--surface);
       border: 1px solid var(--border);
       padding: 6px 10px;
       border-radius: 13px;
       font-size: 12px;
       font-weight: 600;
+      min-width: 0;
     }
-    .score-item { display: flex; align-items: center; gap: 4px; }
+    .deck-tag {
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 110px;
+    }
+    .score-item { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
     .score-num { font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; }
     .score-you { color: var(--accent); }
     .score-opp { color: #f472b6; }
@@ -235,6 +276,7 @@
       border-radius: 999px;
       font-size: 11px;
       font-weight: 700;
+      flex-shrink: 0;
     }
 
     .turn-banner {
@@ -301,11 +343,10 @@
       font-weight: 700;
     }
 
-    /* Grande image vue en entier */
     .hero-photo-wrap {
       position: relative;
       width: 100%;
-      height: 190px;
+      height: 185px;
       border-radius: 15px;
       background: #080c14;
       border: 1px solid var(--border);
@@ -403,7 +444,6 @@
       color: #fffbeb;
     }
 
-    /* Carte adversaire révélée */
     .opp-card {
       background: linear-gradient(160deg, #161d2e 0%, #0e131f 100%);
       border: 1px solid var(--border);
@@ -478,13 +518,15 @@
       <div class="lobby-header">
         <span class="badge">Duel 2 Joueurs</span>
         <h1>Fauna Duel</h1>
-        <p class="subtitle">20 cartes chacun. Choisis la meilleure caractéristique pour rafler tout le paquet adverse.</p>
+        <p class="subtitle">Choisis un paquet de 40 cartes (20 chacun) et affronte ton adversaire.</p>
       </div>
 
-      <div class="lobby-cards">
+      <div class="lobby-body">
         <div class="panel">
           <h2>Créer une partie</h2>
-          <p>Génère un code à 4 chiffres et partage-le à ton adversaire.</p>
+          <p>Sélectionne le type de paquet puis génère un code à 4 chiffres.</p>
+          <label class="deck-label" for="select-deck-type">Type de paquet</label>
+          <select id="select-deck-type" class="deck-select"></select>
           <button id="btn-create" class="btn btn-primary">Générer un code</button>
           <div id="room-code-box" class="room-code-box">
             <div class="status-text">Code de la salle</div>
@@ -505,7 +547,7 @@
         <div id="lobby-error" class="error-msg"></div>
       </div>
 
-      <div style="text-align:center; font-size:11px; color:var(--muted);">
+      <div style="text-align:center; font-size:11px; color:var(--muted); flex-shrink:0;">
         Astuce iPhone : Partager → Sur l'écran d'accueil
       </div>
     </section>
@@ -513,6 +555,8 @@
     <section id="screen-game" class="screen">
       <div class="topbar">
         <div class="score-pill">
+          <span id="active-deck-label" class="deck-tag">Forêt</span>
+          <span style="color:var(--border)">|</span>
           <div class="score-item">
             <span>Toi</span>
             <span id="my-count" class="score-num score-you">20</span>
@@ -604,10 +648,9 @@
 
   <script>
     // ==========================================
-    // RÉCUPÉRATION PAR NOM SCIENTIFIQUE (WIKIPÉDIA EN)
-    // Chaque espèce pointe vers sa fiche taxinomique précise
+    // GESTION DES IMAGES (WIKIPÉDIA EN PAR TITRE/SCI)
     // ==========================================
-    const IMAGE_MODE = "wiki-sci"; // "wiki-sci" ou "local" (./images/<id>.jpg)
+    const IMAGE_MODE = "wiki-sci";
     const imageCache = new Map();
 
     const FORBIDDEN_URL_PARTS = [
@@ -623,78 +666,516 @@
       return !FORBIDDEN_URL_PARTS.some(part => lower.includes(part));
     }
 
-    const ANIMALS = [
-      { id: 1, name: "Baleine bleue", sci: "Balaenoptera_musculus", cat: "Mammifère marin", weight: 140000, length: 27, longevity: 90, gestation: 335 },
-      { id: 2, name: "Éléphant d'Afrique", sci: "African_bush_elephant", cat: "Mammifère", weight: 6000, length: 6.5, longevity: 70, gestation: 660 },
-      { id: 3, name: "Girafe", sci: "Giraffe", cat: "Mammifère", weight: 1200, length: 5.5, longevity: 25, gestation: 450 },
-      { id: 4, name: "Hippopotame", sci: "Hippopotamus", cat: "Mammifère", weight: 1800, length: 4.2, longevity: 45, gestation: 240 },
-      { id: 5, name: "Rhinocéros blanc", sci: "White_rhinoceros", cat: "Mammifère", weight: 2300, length: 4.0, longevity: 50, gestation: 480 },
-      { id: 6, name: "Ours polaire", sci: "Polar_bear", cat: "Mammifère", weight: 500, length: 2.6, longevity: 30, gestation: 240 },
-      { id: 7, name: "Tigre de Sibérie", sci: "Siberian_tiger", cat: "Mammifère", weight: 250, length: 3.1, longevity: 20, gestation: 105 },
-      { id: 8, name: "Lion d'Afrique", sci: "Lion", cat: "Mammifère", weight: 190, length: 2.5, longevity: 16, gestation: 110 },
-      { id: 9, name: "Gorille des plaines", sci: "Western_gorilla", cat: "Mammifère", weight: 170, length: 1.75, longevity: 40, gestation: 257 },
-      { id: 10, name: "Guépard", sci: "Cheetah", cat: "Mammifère", weight: 55, length: 2.1, longevity: 14, gestation: 93 },
-      { id: 11, name: "Loup gris", sci: "Wolf", cat: "Mammifère", weight: 45, length: 1.5, longevity: 14, gestation: 63 },
-      { id: 12, name: "Kangourou roux", sci: "Red_kangaroo", cat: "Marsupial", weight: 85, length: 1.6, longevity: 22, gestation: 33 },
-      { id: 13, name: "Orque", sci: "Orca", cat: "Mammifère marin", weight: 4500, length: 8.0, longevity: 60, gestation: 510 },
-      { id: 14, name: "Grand requin blanc", sci: "Great_white_shark", cat: "Poisson", weight: 1100, length: 5.2, longevity: 70, gestation: 365 },
-      { id: 15, name: "Crocodile marin", sci: "Saltwater_crocodile", cat: "Reptile", weight: 700, length: 5.5, longevity: 70, gestation: 85 },
-      { id: 16, name: "Tortue géante des Galápagos", sci: "Galápagos_tortoise", cat: "Reptile", weight: 250, length: 1.5, longevity: 150, gestation: 130 },
-      { id: 17, name: "Anaconda vert", sci: "Eunectes_murinus", cat: "Reptile", weight: 130, length: 6.5, longevity: 25, gestation: 180 },
-      { id: 18, name: "Dragon de Komodo", sci: "Komodo_dragon", cat: "Reptile", weight: 80, length: 2.8, longevity: 30, gestation: 240 },
-      { id: 19, name: "Autruche", sci: "Common_ostrich", cat: "Oiseau", weight: 120, length: 2.4, longevity: 40, gestation: 42 },
-      { id: 20, name: "Manchot empereur", sci: "Emperor_penguin", cat: "Oiseau", weight: 35, length: 1.15, longevity: 20, gestation: 65 },
-      { id: 21, name: "Albatros hurleur", sci: "Wandering_albatross", cat: "Oiseau", weight: 9, length: 1.35, longevity: 55, gestation: 78 },
-      { id: 22, name: "Aigle royal", sci: "Golden_eagle", cat: "Oiseau", weight: 5.5, length: 0.9, longevity: 32, gestation: 43 },
-      { id: 23, name: "Flamant rose", sci: "Greater_flamingo", cat: "Oiseau", weight: 3.5, length: 1.4, longevity: 35, gestation: 29 },
-      { id: 24, name: "Ara macao", sci: "Scarlet_macaw", cat: "Oiseau", weight: 1.1, length: 0.85, longevity: 50, gestation: 26 },
-      { id: 25, name: "Morse", sci: "Walrus", cat: "Mammifère marin", weight: 1200, length: 3.2, longevity: 40, gestation: 450 },
-      { id: 26, name: "Bison d'Amérique", sci: "American_bison", cat: "Mammifère", weight: 800, length: 3.0, longevity: 22, gestation: 285 },
-      { id: 27, name: "Chameau de Bactriane", sci: "Bactrian_camel", cat: "Mammifère", weight: 600, length: 3.0, longevity: 40, gestation: 390 },
-      { id: 28, name: "Zèbre de Grévy", sci: "Grévy%27s_zebra", cat: "Mammifère", weight: 400, length: 2.5, longevity: 25, gestation: 390 },
-      { id: 29, name: "Panda géant", sci: "Giant_panda", cat: "Mammifère", weight: 115, length: 1.6, longevity: 25, gestation: 135 },
-      { id: 30, name: "Orang-outan", sci: "Orangutan", cat: "Mammifère", weight: 75, length: 1.4, longevity: 45, gestation: 260 },
-      { id: 31, name: "Koala", sci: "Koala", cat: "Marsupial", weight: 11, length: 0.75, longevity: 15, gestation: 35 },
-      { id: 32, name: "Castor d'Europe", sci: "Eurasian_beaver", cat: "Mammifère", weight: 25, length: 1.1, longevity: 18, gestation: 105 },
-      { id: 33, name: "Renard roux", sci: "Red_fox", cat: "Mammifère", weight: 7, length: 1.0, longevity: 10, gestation: 52 },
-      { id: 34, name: "Hérisson d'Europe", sci: "European_hedgehog", cat: "Mammifère", weight: 1.0, length: 0.28, longevity: 7, gestation: 35 },
-      { id: 35, name: "Chauve-souris renard volant", sci: "Pteropus", cat: "Mammifère", weight: 1.2, length: 0.4, longevity: 20, gestation: 150 },
-      { id: 36, name: "Raie manta géante", sci: "Giant_oceanic_manta_ray", cat: "Poisson", weight: 1600, length: 4.5, longevity: 40, gestation: 365 },
-      { id: 37, name: "Pieuvre géante du Pacifique", sci: "Giant_Pacific_octopus", cat: "Mollusque", weight: 50, length: 4.3, longevity: 4, gestation: 180 },
-      { id: 38, name: "Crabe-araignée géant", sci: "Japanese_spider_crab", cat: "Crustacé", weight: 19, length: 0.4, longevity: 60, gestation: 14 },
-      { id: 39, name: "Salamandre géante", sci: "Chinese_giant_salamander", cat: "Amphibien", weight: 30, length: 1.5, longevity: 55, gestation: 50 },
-      { id: 40, name: "Ornithorynque", sci: "Platypus", cat: "Monotrème", weight: 1.8, length: 0.5, longevity: 17, gestation: 10 }
-    ];
+    // Helper compact pour créer des entrées d'animaux/créatures
+    const c = (name, sci, cat, weight, length, longevity, gestation) => ({
+      name, sci, cat, weight, length, longevity, gestation
+    });
 
-    async function fetchWikiAnimalImage(animal) {
-      if (imageCache.has(animal.id)) return imageCache.get(animal.id);
+    // ==========================================
+    // 10 PAQUETS THÉMATIQUES (40 CARTES CHACUN)
+    // weight: kg | length: m | longevity: ans | gestation: jours
+    // ==========================================
+    const DECK_PACKS = {
+      "animaux de la forêt": {
+        label: "Animaux de la forêt",
+        cards: [
+          c("Cerf élaphe", "Red_deer", "Cervidé", 200, 2.3, 18, 235),
+          c("Sanglier", "Wild_boar", "Suidé", 120, 1.7, 15, 115),
+          c("Ours brun", "Brown_bear", "Ursidé", 320, 2.2, 28, 220),
+          c("Loup gris", "Wolf", "Canidé", 45, 1.5, 14, 63),
+          c("Renard roux", "Red_fox", "Canidé", 7, 1.0, 10, 52),
+          c("Lynx boréal", "Eurasian_lynx", "Félidé", 24, 1.1, 17, 70),
+          c("Castor d'Europe", "Eurasian_beaver", "Rongeur", 25, 1.1, 18, 105),
+          c("Blaireau européen", "European_badger", "Mustélidé", 14, 0.9, 15, 60),
+          c("Écureuil roux", "Red_squirrel", "Rongeur", 0.35, 0.42, 7, 38),
+          c("Hérisson d'Europe", "European_hedgehog", "Érinacéidé", 1.0, 0.28, 7, 35),
+          c("Chevreuil", "Roe_deer", "Cervidé", 28, 1.2, 14, 280),
+          c("Élan", "Moose", "Cervidé", 500, 2.9, 20, 240),
+          c("Putois d'Europe", "European_polecat", "Mustélidé", 1.2, 0.55, 8, 42),
+          c("Martre des pins", "European_pine_marten", "Mustélidé", 1.5, 0.65, 12, 30),
+          c("Pic noir", "Black_woodpecker", "Oiseau", 0.32, 0.46, 12, 13),
+          c("Chouette hulotte", "Tawny_owl", "Rapace nocturne", 0.5, 0.4, 18, 29),
+          c("Autour des palombes", "Northern_goshawk", "Rapace", 1.1, 0.6, 15, 36),
+          c("Grand tétras", "Western_capercaillie", "Gallinacé", 4.2, 0.85, 12, 26),
+          c("Salamandre tachetée", "Fire_salamander", "Amphibien", 0.04, 0.2, 20, 45),
+          c("Crapaud commun", "Common_toad", "Amphibien", 0.08, 0.15, 12, 14),
+          c("Vipère péliade", "Vipera_berus", "Reptile", 0.18, 0.75, 15, 90),
+          c("Couleuvre à collier", "Natrix_natrix", "Reptile", 0.25, 1.2, 16, 60),
+          c("Lézard vert", "European_green_lizard", "Reptile", 0.06, 0.4, 10, 50),
+          c("Ratons laveurs", "Raccoon", "Procyonidé", 8, 0.75, 13, 63),
+          c("Porc-épic d'Amérique", "North_American_porcupine", "Rongeur", 9, 0.8, 18, 210),
+          c("Moufette rayée", "Striped_skunk", "Méphitidé", 3.5, 0.65, 8, 63),
+          c("Wapiti", "Elk", "Cervidé", 330, 2.5, 18, 250),
+          c("Puma", "Cougar", "Félidé", 70, 2.2, 15, 92),
+          c("Ours noir d'Amérique", "American_black_bear", "Ursidé", 160, 1.8, 25, 220),
+          c("Glouton", "Wolverine", "Mustélidé", 18, 1.0, 13, 40),
+          c("Hibou grand-duc", "Eurasian_eagle-owl", "Rapace nocturne", 3.0, 0.7, 25, 35),
+          c("Geai des chênes", "Eurasian_jay", "Oiseau", 0.17, 0.35, 16, 17),
+          c("Mésange charbonnière", "Great_tit", "Oiseau", 0.02, 0.14, 9, 13),
+          c("Lucane cerf-volant", "Stag_beetle", "Insecte", 0.015, 0.08, 4, 30),
+          c("Escargot de Bourgogne", "Helix_pomatia", "Gastéropode", 0.03, 0.05, 8, 25),
+          c("Loutre d'Europe", "European_otter", "Mustélidé", 10, 1.15, 15, 63),
+          c("Genette commune", "Common_genet", "Viverridé", 2.0, 0.95, 13, 75),
+          c("Chat sauvage", "Wildcat", "Félidé", 6.5, 0.85, 14, 65),
+          c("Lièvre d'Europe", "European_hare", "Lagomorphe", 4.5, 0.6, 9, 42),
+          c("Bécasse des bois", "Eurasian_woodcock", "Oiseau", 0.34, 0.35, 14, 22)
+        ]
+      },
+
+      "animaux préhistoriques": {
+        label: "Animaux préhistoriques",
+        cards: [
+          c("Tyrannosaurus rex", "Tyrannosaurus", "Théropode", 8500, 12.5, 28, 75),
+          c("Tricératops", "Triceratops", "Cératopsidé", 9000, 8.5, 30, 80),
+          c("Diplodocus", "Diplodocus", "Sauropode", 15000, 27.0, 60, 90),
+          c("Brachiosaure", "Brachiosaurus", "Sauropode", 35000, 22.0, 70, 95),
+          c("Stégosaure", "Stegosaurus", "Thyréophore", 4500, 9.0, 35, 70),
+          c("Vélociraptor", "Velociraptor", "Dromaeosauridé", 20, 2.0, 15, 55),
+          c("Allosaure", "Allosaurus", "Théropode", 2500, 9.5, 25, 70),
+          c("Spinosaure", "Spinosaurus", "Théropode", 7000, 14.0, 26, 75),
+          c("Ankylosaure", "Ankylosaurus", "Ankylosauridé", 6000, 7.5, 35, 75),
+          c("Ptéranodon", "Pteranodon", "Ptérosaure", 35, 6.0, 20, 60),
+          c("Mammouth laineux", "Woolly_mammoth", "Proboscidien", 6000, 4.0, 60, 660),
+          c("Smilodon", "Smilodon", "Machairodontiné", 280, 2.1, 20, 105),
+          c("Mégathérium", "Megatherium", "Xénarthre", 4000, 6.0, 35, 300),
+          c("Mésalocéros / Paracératérium", "Paraceratherium", "Périssodactyle", 17000, 7.5, 45, 500),
+          c("Mégalodon", "Megalodon", "Lamniforme", 48000, 16.0, 80, 365),
+          c("Mosasaure", "Mosasaurus", "Squamate marin", 14000, 15.0, 45, 150),
+          c("Plésiosaure", "Plesiosaurus", "Sauroptérygien", 2000, 4.5, 30, 120),
+          c("Ichtyosaure", "Ichthyosaurus", "Ichtyoptérygien", 400, 3.0, 25, 110),
+          c("Dunkleosteus", "Dunkleosteus", "Placoderme", 3500, 8.5, 40, 90),
+          c("Archéoptéryx", "Archaeopteryx", "Avialae", 1.0, 0.5, 12, 35),
+          c("Parasaurolophus", "Parasaurolophus", "Hadrosauridé", 3000, 9.5, 28, 75),
+          c("Carnotaure", "Carnotaurus", "Abélisauridé", 2000, 8.0, 22, 65),
+          c("Ptérodactyle", "Pterodactylus", "Ptérosaure", 5, 1.0, 15, 45),
+          c("Dimétrodon", "Dimetrodon", "Synapside", 250, 3.5, 22, 60),
+          c("Élasmosaure", "Elasmosaurus", "Plésiosaure", 2200, 13.0, 35, 130),
+          c("Glyptodon", "Glyptodon", "Cingulata", 2000, 3.3, 30, 240),
+          c("Aurochs", "Aurochs", "Bovidé", 900, 2.8, 22, 270),
+          c("Dodo", "Dodo", "Columbidé", 18, 1.0, 25, 35),
+          c("Tigre de Tasmanie", "Thylacine", "Marsupial", 30, 1.8, 12, 30),
+          c("Argentavis", "Argentavis", "Oiseau géant", 72, 6.5, 40, 65),
+          c("Titanoboa", "Titanoboa", "Serpent", 1135, 13.0, 30, 180),
+          c("Arthropleura", "Arthropleura", "Myriapode", 50, 2.5, 10, 40),
+          c("Anomalocaris", "Anomalocaris", "Radiodonte", 15, 1.0, 8, 20),
+          c("Trilobite", "Trilobita", "Arthropode", 0.5, 0.3, 6, 15),
+          c("Ammonite", "Ammonoidea", "Céphalopode", 2.0, 0.6, 10, 25),
+          c("Megaloceros", "Megaloceros", "Cervidé", 700, 2.5, 20, 240),
+          c("Doedicurus", "Doedicurus", "Glyptodontidé", 1900, 3.6, 30, 240),
+          c("Quetzalcoatlus", "Quetzalcoatlus", "Ptérosaure", 220, 10.5, 30, 75),
+          c("Giganotosaure", "Giganotosaurus", "Théropode", 8000, 13.0, 28, 75),
+          c("Camarasaurus", "Camarasaurus", "Sauropode", 20000, 18.0, 55, 85)
+        ]
+      },
+
+      "animaux marins": {
+        label: "Animaux marins",
+        cards: [
+          c("Baleine bleue", "Balaenoptera_musculus", "Cétacé", 140000, 27.0, 90, 335),
+          c("Cachalot", "Sperm_whale", "Cétacé", 45000, 18.0, 70, 450),
+          c("Baleine à bosse", "Humpback_whale", "Cétacé", 36000, 15.0, 50, 350),
+          c("Orque", "Orca", "Delphinidé", 4500, 8.0, 60, 510),
+          c("Grand dauphin", "Common_bottlenose_dolphin", "Delphinidé", 250, 3.0, 45, 365),
+          c("Narval", "Narwhal", "Monodontidé", 1600, 4.8, 50, 450),
+          c("Grand requin blanc", "Great_white_shark", "Requin", 1100, 5.2, 70, 365),
+          c("Requin-baleine", "Whale_shark", "Requin", 19000, 12.0, 80, 300),
+          c("Requin-marteau", "Hammerhead_shark", "Requin", 350, 4.0, 35, 330),
+          c("Raie manta géante", "Giant_oceanic_manta_ray", "Raie", 1600, 4.5, 40, 365),
+          c("Pieuvre géante du Pacifique", "Giant_Pacific_octopus", "Céphalopode", 50, 4.3, 4, 180),
+          c("Calmar géant", "Giant_squid", "Céphalopode", 275, 11.0, 5, 120),
+          c("Tortue luth", "Leatherback_sea_turtle", "Tortue marine", 500, 2.0, 50, 65),
+          c("Tortue verte", "Green_sea_turtle", "Tortue marine", 180, 1.2, 80, 55),
+          c("Morse", "Walrus", "Pinnipède", 1200, 3.2, 40, 450),
+          c("Éléphant de mer", "Elephant_seal", "Pinnipède", 3000, 5.0, 22, 340),
+          c("Phoque gris", "Grey_seal", "Pinnipède", 250, 2.3, 35, 345),
+          c("Lamantin", "Manatee", "Sirénien", 550, 3.5, 50, 380),
+          c("Dugong", "Dugong", "Sirénien", 400, 3.0, 70, 410),
+          c("Méduse crinière de lion", "Lion%27s_mane_jellyfish", "Cnidaire", 150, 2.2, 1, 30),
+          c("Poisson-lune", "Ocean_sunfish", "Poisson osseux", 1500, 2.5, 10, 90),
+          c("Espadon voilier", "Indo-Pacific_sailfish", "Poisson osseux", 90, 3.2, 12, 20),
+          c("Thon rouge", "Atlantic_bluefin_tuna", "Poisson osseux", 450, 3.0, 35, 15),
+          c("Murène verte", "Green_moray", "Poisson osseux", 15, 2.0, 25, 30),
+          c("Hippocampe", "Seahorse", "Poisson osseux", 0.02, 0.15, 4, 21),
+          c("Poisson-clown", "Amphiprioninae", "Poisson osseux", 0.15, 0.11, 8, 8),
+          c("Poisson-ange", "Angelfish", "Poisson osseux", 0.5, 0.25, 15, 12),
+          c("Béluga", "Beluga_whale", "Cétacé", 1300, 4.5, 40, 450),
+          c("Marsouin commun", "Harbour_porpoise", "Cétacé", 60, 1.7, 20, 315),
+          c("Requin-tigre", "Tiger_shark", "Requin", 600, 4.2, 30, 420),
+          c("Requin-renard", "Thresher_shark", "Requin", 350, 4.5, 25, 270),
+          c("Crabe-araignée géant", "Japanese_spider_crab", "Crustacé", 19, 0.4, 60, 14),
+          c("Homard européen", "European_lobster", "Crustacé", 4.0, 0.6, 50, 270),
+          c("Étoile de mer", "Starfish", "Échinoderme", 0.5, 0.3, 35, 40),
+          c("Bénitier géant", "Tridacna_gigas", "Mollusque", 200, 1.2, 100, 14),
+          c("Nautile", "Nautilus", "Céphalopode", 1.0, 0.22, 20, 300),
+          c("Raie pastenague", "Stingray", "Raie", 120, 1.8, 25, 150),
+          c("Barracuda", "Barracuda", "Poisson osseux", 35, 1.6, 14, 15),
+          c("Loutre de mer", "Sea_otter", "Mustélidé", 35, 1.3, 20, 180),
+          c("Baleine franche", "Right_whale", "Cétacé", 60000, 16.0, 70, 365)
+        ]
+      },
+
+      "animaux du froid": {
+        label: "Animaux du froid",
+        cards: [
+          c("Ours polaire", "Polar_bear", "Ursidé", 500, 2.6, 30, 240),
+          c("Manchot empereur", "Emperor_penguin", "Oiseau", 35, 1.15, 20, 65),
+          c("Renne / Caribou", "Reindeer", "Cervidé", 180, 2.0, 18, 225),
+          c("Bœuf musqué", "Muskox", "Bovidé", 320, 2.2, 22, 255),
+          c("Renard polaire", "Arctic_fox", "Canidé", 5.5, 0.85, 10, 52),
+          c("Harfang des neiges", "Snowy_owl", "Rapace nocturne", 2.2, 0.62, 12, 32),
+          c("Lièvre arctique", "Arctic_hare", "Lagomorphe", 5.0, 0.6, 10, 50),
+          c("Morse", "Walrus", "Pinnipède", 1200, 3.2, 40, 450),
+          c("Phoque du Groenland", "Harp_seal", "Pinnipède", 140, 1.8, 30, 345),
+          c("Béluga", "Beluga_whale", "Cétacé", 1300, 4.5, 40, 450),
+          c("Narval", "Narwhal", "Cétacé", 1600, 4.8, 50, 450),
+          c("Léopard de mer", "Leopard_seal", "Pinnipède", 400, 3.2, 26, 270),
+          c("Manchot d'Adélie", "Adélie_penguin", "Oiseau", 5.5, 0.7, 15, 35),
+          c("Lagopède alpin", "Rock_ptarmigan", "Gallinacé", 0.55, 0.36, 8, 22),
+          c("Glouton", "Wolverine", "Mustélidé", 18, 1.0, 13, 40),
+          c("Loup de l'Arctique", "Arctic_wolf", "Canidé", 45, 1.5, 14, 63),
+          c("Élan", "Moose", "Cervidé", 500, 2.9, 20, 240),
+          c("Lemming", "Lemming", "Rongeur", 0.08, 0.15, 3, 21),
+          c("Phoque de Weddell", "Weddell_seal", "Pinnipède", 450, 3.0, 25, 300),
+          c("Albatros hurleur", "Wandering_albatross", "Oiseau", 9.0, 1.35, 55, 78),
+          c("Puffin / Macareux", "Atlantic_puffin", "Oiseau", 0.5, 0.3, 25, 40),
+          c("Orque", "Orca", "Delphinidé", 4500, 8.0, 60, 510),
+          c("Mouton de Dall", "Dall_sheep", "Bovidé", 80, 1.5, 14, 170),
+          c("Chèvre des montagnes", "Mountain_goat", "Bovidé", 90, 1.6, 15, 180),
+          c("Panthère des neiges", "Snow_leopard", "Félidé", 45, 2.0, 18, 100),
+          c("Yak sauvage", "Wild_yak", "Bovidé", 800, 2.8, 23, 258),
+          c("Tahr de l'Himalaya", "Himalayan_tahr", "Bovidé", 95, 1.5, 16, 185),
+          c("Pika", "Pika", "Lagomorphe", 0.17, 0.2, 6, 30),
+          c("Marmotte des Alpes", "Alpine_marmot", "Rongeur", 5.5, 0.55, 13, 34),
+          c("Ours brun", "Brown_bear", "Ursidé", 320, 2.2, 28, 220),
+          c("Sterne arctique", "Arctic_tern", "Oiseau", 0.11, 0.35, 30, 22),
+          c("Phoque annelé", "Ringed_seal", "Pinnipède", 70, 1.35, 40, 270),
+          c("Éléphant de mer", "Elephant_seal", "Pinnipède", 3000, 5.0, 22, 340),
+          c("Gorfou sauteur", "Southern_rockhopper_penguin", "Oiseau", 3.0, 0.55, 15, 34),
+          c("Manchot royal", "King_penguin", "Oiseau", 14, 0.9, 25, 55),
+          c("Pétrel des neiges", "Snow_petrel", "Oiseau", 0.35, 0.38, 20, 45),
+          c("Moustique arctique / Bourdon", "Bombus_polaris", "Insecte", 0.002, 0.02, 1, 20),
+          c("Caribou des bois", "Woodland_caribou", "Cervidé", 210, 2.1, 17, 230),
+          c("Ours blanc / Kodiak", "Kodiak_bear", "Ursidé", 450, 2.5, 25, 220),
+          c("Baleine boréale", "Bowhead_whale", "Cétacé", 80000, 16.0, 150, 400)
+        ]
+      },
+
+      "prédateurs": {
+        label: "Prédateurs",
+        cards: [
+          c("Lion d'Afrique", "Lion", "Félidé", 190, 2.5, 16, 110),
+          c("Tigre de Sibérie", "Siberian_tiger", "Félidé", 250, 3.1, 20, 105),
+          c("Guépard", "Cheetah", "Félidé", 55, 2.1, 14, 93),
+          c("Léopard", "Leopard", "Félidé", 65, 1.9, 17, 100),
+          c("Jaguar", "Jaguar", "Félidé", 100, 2.2, 16, 100),
+          c("Puma", "Cougar", "Félidé", 70, 2.2, 15, 92),
+          c("Loup gris", "Wolf", "Canidé", 45, 1.5, 14, 63),
+          c("Hyène tachetée", "Spotted_hyena", "Hyénidé", 65, 1.5, 20, 110),
+          c("Lycaon", "African_wild_dog", "Canidé", 25, 1.0, 11, 70),
+          c("Crocodile marin", "Saltwater_crocodile", "Reptile", 700, 5.5, 70, 85),
+          c("Crocodile du Nil", "Nile_crocodile", "Reptile", 500, 4.8, 60, 85),
+          c("Alligator d'Amérique", "American_alligator", "Reptile", 360, 4.0, 50, 65),
+          c("Anaconda vert", "Eunectes_murinus", "Serpent", 130, 6.5, 25, 180),
+          c("Python réticulé", "Reticulated_python", "Serpent", 90, 6.0, 25, 85),
+          c("Cobra royal", "King_cobra", "Serpent", 8.0, 4.0, 20, 75),
+          c("Dragon de Komodo", "Komodo_dragon", "Reptile", 80, 2.8, 30, 240),
+          c("Orque", "Orca", "Cétacé", 4500, 8.0, 60, 510),
+          c("Grand requin blanc", "Great_white_shark", "Requin", 1100, 5.2, 70, 365),
+          c("Requin-tigre", "Tiger_shark", "Requin", 600, 4.2, 30, 420),
+          c("Requin-bouledogue", "Bull_shark", "Requin", 200, 3.2, 25, 330),
+          c("Aigle royal", "Golden_eagle", "Rapace", 5.5, 0.9, 32, 43),
+          c("Pygargue à tête blanche", "Bald_eagle", "Rapace", 5.0, 0.95, 28, 35),
+          c("Faucon pèlerin", "Peregrine_falcon", "Rapace", 1.0, 0.45, 16, 32),
+          c("Hibou grand-duc", "Eurasian_eagle-owl", "Rapace nocturne", 3.0, 0.7, 25, 35),
+          c("Harfang des neiges", "Snowy_owl", "Rapace nocturne", 2.2, 0.62, 12, 32),
+          c("Ours polaire", "Polar_bear", "Ursidé", 500, 2.6, 30, 240),
+          c("Ours brun", "Brown_bear", "Ursidé", 320, 2.2, 28, 220),
+          c("Lynx boréal", "Eurasian_lynx", "Félidé", 24, 1.1, 17, 70),
+          c("Ocelot", "Ocelot", "Félidé", 12, 1.0, 15, 80),
+          c("Caracal", "Caracal", "Félidé", 15, 0.9, 16, 78),
+          c("Serval", "Serval", "Félidé", 14, 0.95, 18, 73),
+          c("Dingo", "Dingo", "Canidé", 18, 1.2, 12, 63),
+          c("Coyote", "Coyote", "Canidé", 15, 1.2, 12, 62),
+          c("Glouton", "Wolverine", "Mustélidé", 18, 1.0, 13, 40),
+          c("Léopard de mer", "Leopard_seal", "Pinnipède", 400, 3.2, 26, 270),
+          c("Harpye féroce", "Harpy_eagle", "Rapace", 8.0, 1.0, 35, 56),
+          c("Secrétaire / Serpentaire", "Secretarybird", "Rapace", 4.0, 1.3, 15, 45),
+          c("Pieuvre géante du Pacifique", "Giant_Pacific_octopus", "Céphalopode", 50, 4.3, 4, 180),
+          c("Barracuda", "Barracuda", "Poisson", 35, 1.6, 14, 15),
+          c("Brochet", "Northern_pike", "Poisson", 15, 1.1, 20, 14)
+        ]
+      },
+
+      "animaux d'Afrique": {
+        label: "Animaux d'Afrique",
+        cards: [
+          c("Éléphant d'Afrique", "African_bush_elephant", "Mammifère", 6000, 6.5, 70, 660),
+          c("Girafe", "Giraffe", "Mammifère", 1200, 5.5, 25, 450),
+          c("Lion d'Afrique", "Lion", "Mammifère", 190, 2.5, 16, 110),
+          c("Hippopotame", "Hippopotamus", "Mammifère", 1800, 4.2, 45, 240),
+          c("Rhinocéros blanc", "White_rhinoceros", "Mammifère", 2300, 4.0, 50, 480),
+          c("Rhinocéros noir", "Black_rhinoceros", "Mammifère", 1100, 3.5, 40, 450),
+          c("Guépard", "Cheetah", "Mammifère", 55, 2.1, 14, 93),
+          c("Léopard d'Afrique", "Leopard", "Mammifère", 65, 1.9, 17, 100),
+          c("Hyène tachetée", "Spotted_hyena", "Mammifère", 65, 1.5, 20, 110),
+          c("Zèbre des plaines", "Plains_zebra", "Mammifère", 320, 2.4, 25, 375),
+          c("Gnou bleu", "Blue_wildebeest", "Mammifère", 220, 2.1, 20, 255),
+          c("Buffle d'Afrique", "African_buffalo", "Mammifère", 750, 3.0, 22, 340),
+          c("Gorille des plaines", "Western_gorilla", "Primate", 170, 1.75, 40, 257),
+          c("Chimpanzé", "Chimpanzee", "Primate", 50, 1.5, 45, 230),
+          c("Babouin chacma", "Chacma_baboon", "Primate", 28, 1.1, 30, 180),
+          c("Suricate", "Meerkat", "Mangouste", 0.8, 0.5, 12, 70),
+          c("Phacochère", "Common_warthog", "Mammifère", 90, 1.3, 15, 170),
+          c("Autruche", "Common_ostrich", "Oiseau", 120, 2.4, 40, 42),
+          c("Crocodile du Nil", "Nile_crocodile", "Reptile", 500, 4.8, 60, 85),
+          c("Mamba noir", "Black_mamba", "Serpent", 2.0, 3.0, 14, 75),
+          c("Python de Seba", "African_rock_python", "Serpent", 60, 4.5, 25, 85),
+          c("Impala", "Impala", "Antilope", 55, 1.4, 15, 195),
+          c("Grand koudou", "Greater_kudu", "Antilope", 240, 2.2, 18, 240),
+          c("Oryx gazelle", "Gemsbok", "Antilope", 210, 2.1, 20, 270),
+          c("Fennec", "Fennec_fox", "Canidé", 1.2, 0.4, 13, 51),
+          c("Chacal à chabraque", "Black-backed_jackal", "Canidé", 9.0, 0.85, 12, 60),
+          c("Serval", "Serval", "Félidé", 14, 0.95, 18, 73),
+          c("Caracal", "Caracal", "Félidé", 15, 0.9, 16, 78),
+          c("Lycaon", "African_wild_dog", "Canidé", 25, 1.0, 11, 70),
+          c("Marabout d'Afrique", "Marabou_stork", "Oiseau", 7.5, 1.5, 25, 30),
+          c("Secrétaire / Serpentaire", "Secretarybird", "Oiseau", 4.0, 1.3, 15, 45),
+          c("Calao terrestre", "Southern_ground_hornbill", "Oiseau", 4.0, 1.1, 40, 40),
+          c("Flamant rose", "Greater_flamingo", "Oiseau", 3.5, 1.4, 35, 29),
+          c("Aigle martial", "Martial_eagle", "Rapace", 5.2, 0.85, 25, 48),
+          c("Pangolin géant", "Giant_pangolin", "Pholidote", 30, 1.6, 20, 140),
+          c("Okapi", "Okapi", "Mammifère", 250, 2.2, 25, 440),
+          c("Lémur catta", "Ring-tailed_lemur", "Lémurien", 2.5, 0.95, 20, 135),
+          c("Caméléon panthère", "Panther_chameleon", "Reptile", 0.18, 0.45, 7, 240),
+          c("Tortue sillonnée", "African_spurred_tortoise", "Tortue", 85, 0.8, 80, 110),
+          c("Dromadaire", "Dromedary", "Camélidé", 550, 3.0, 40, 390)
+        ]
+      },
+
+      "animaux de la jungle": {
+        label: "Animaux de la jungle",
+        cards: [
+          c("Tigre du Bengale", "Bengal_tiger", "Félidé", 220, 2.9, 18, 104),
+          c("Jaguar", "Jaguar", "Félidé", 100, 2.2, 16, 100),
+          c("Orang-outan", "Orangutan", "Primate", 75, 1.4, 45, 260),
+          c("Gorille des plaines", "Western_gorilla", "Primate", 170, 1.75, 40, 257),
+          c("Chimpanzé", "Chimpanzee", "Primate", 50, 1.5, 45, 230),
+          c("Tapir terrestre", "South_American_tapir", "Mammifère", 220, 2.0, 28, 395),
+          c("Paresseux à trois doigts", "Three-toed_sloth", "Xénarthre", 4.5, 0.6, 30, 180),
+          c("Capibara", "Capybara", "Rongeur", 55, 1.2, 10, 150),
+          c("Anaconda vert", "Eunectes_murinus", "Serpent", 130, 6.5, 25, 180),
+          c("Python réticulé", "Reticulated_python", "Serpent", 90, 6.0, 25, 85),
+          c("Ocelot", "Ocelot", "Félidé", 12, 1.0, 15, 80),
+          c("Toucan toco", "Toco_toucan", "Oiseau", 0.65, 0.6, 20, 17),
+          c("Ara macao", "Scarlet_macaw", "Oiseau", 1.1, 0.85, 50, 26),
+          c("Harpye féroce", "Harpy_eagle", "Rapace", 8.0, 1.0, 35, 56),
+          c("Calao bicorne", "Great_hornbill", "Oiseau", 3.0, 1.2, 45, 40),
+          c("Gibbon agile", "Agile_gibbon", "Primate", 6.0, 0.6, 35, 210),
+          c("Singe hurleur", "Howler_monkey", "Primate", 7.5, 0.8, 20, 185),
+          c("Coati", "Coati", "Procyonidé", 5.5, 1.1, 14, 75),
+          c("Dendrobate / Grenouille", "Poison_dart_frog", "Amphibien", 0.01, 0.04, 10, 14),
+          c("Caïman à lunettes", "Spectacled_caiman", "Reptile", 40, 2.2, 35, 80),
+          c("Éléphant d'Asie", "Asian_elephant", "Mammifère", 4500, 6.0, 65, 640),
+          c("Léopard tacheté / Panthère", "Leopard", "Félidé", 65, 1.9, 17, 100),
+          c("Okapi", "Okapi", "Mammifère", 250, 2.2, 25, 440),
+          c("Mandrill", "Mandrill", "Primate", 32, 0.9, 25, 175),
+          c("Lémurien / Aye-aye", "Aye-aye", "Primate", 2.5, 0.8, 20, 155),
+          c("Pangolin de Malaisie", "Sunda_pangolin", "Pholidote", 8.0, 1.1, 15, 130),
+          c("Ours malais", "Sun_bear", "Ursidé", 55, 1.4, 25, 95),
+          c("Binturong", "Binturong", "Viverridé", 15, 1.5, 22, 91),
+          c("Casoar à casque", "Southern_cassowary", "Oiseau", 55, 1.6, 35, 50),
+          c("Paon bleu", "Indian_peafowl", "Gallinacé", 5.0, 2.0, 20, 28),
+          c("Iguane vert", "Green_iguana", "Reptile", 4.5, 1.8, 18, 75),
+          c("Basilique vert", "Plumed_basilisk", "Reptile", 0.4, 0.75, 10, 65),
+          c("Morpho bleu", "Morpho_menelaus", "Insecte", 0.003, 0.15, 1, 20),
+          c("Fourmilier géant", "Giant_anteater", "Xénarthre", 40, 2.0, 16, 190),
+          c("Tatou à neuf bandes", "Nine-banded_armadillo", "Xénarthre", 6.0, 0.5, 15, 150),
+          c("Pécari à collier", "Collared_peccary", "Tayassuidé", 25, 1.0, 20, 145),
+          c("Tamarin empereur", "Emperor_tamarin", "Primate", 0.5, 0.25, 16, 145),
+          c("Cobra royal", "King_cobra", "Serpent", 8.0, 4.0, 20, 75),
+          c("Colibri", "Hummingbird", "Oiseau", 0.005, 0.09, 8, 16),
+          c("Bousier / Scarabée rhinocéros", "Dynastinae", "Insecte", 0.02, 0.07, 2, 30)
+        ]
+      },
+
+      "animaux carnivore": {
+        label: "Animaux carnivore",
+        cards: [
+          c("Tigre de Sibérie", "Siberian_tiger", "Carnivore", 250, 3.1, 20, 105),
+          c("Lion d'Afrique", "Lion", "Carnivore", 190, 2.5, 16, 110),
+          c("Ours polaire", "Polar_bear", "Carnivore", 500, 2.6, 30, 240),
+          c("Ours brun", "Brown_bear", "Carnivore", 320, 2.2, 28, 220),
+          c("Loup gris", "Wolf", "Carnivore", 45, 1.5, 14, 63),
+          c("Guépard", "Cheetah", "Carnivore", 55, 2.1, 14, 93),
+          c("Jaguar", "Jaguar", "Carnivore", 100, 2.2, 16, 100),
+          c("Léopard", "Leopard", "Carnivore", 65, 1.9, 17, 100),
+          c("Puma", "Cougar", "Carnivore", 70, 2.2, 15, 92),
+          c("Hyène tachetée", "Spotted_hyena", "Carnivore", 65, 1.5, 20, 110),
+          c("Lycaon", "African_wild_dog", "Carnivore", 25, 1.0, 11, 70),
+          c("Renard roux", "Red_fox", "Carnivore", 7.0, 1.0, 10, 52),
+          c("Renard polaire", "Arctic_fox", "Carnivore", 5.5, 0.85, 10, 52),
+          c("Lynx boréal", "Eurasian_lynx", "Carnivore", 24, 1.1, 17, 70),
+          c("Glouton", "Wolverine", "Carnivore", 18, 1.0, 13, 40),
+          c("Blaireau européen", "European_badger", "Carnivore", 14, 0.9, 15, 60),
+          c("Loutre d'Europe", "European_otter", "Carnivore", 10, 1.15, 15, 63),
+          c("Morse", "Walrus", "Carnivore marin", 1200, 3.2, 40, 450),
+          c("Éléphant de mer", "Elephant_seal", "Carnivore marin", 3000, 5.0, 22, 340),
+          c("Léopard de mer", "Leopard_seal", "Carnivore marin", 400, 3.2, 26, 270),
+          c("Orque", "Orca", "Cétacé carnivore", 4500, 8.0, 60, 510),
+          c("Grand requin blanc", "Great_white_shark", "Requin", 1100, 5.2, 70, 365),
+          c("Requin-tigre", "Tiger_shark", "Requin", 600, 4.2, 30, 420),
+          c("Crocodile marin", "Saltwater_crocodile", "Reptile", 700, 5.5, 70, 85),
+          c("Crocodile du Nil", "Nile_crocodile", "Reptile", 500, 4.8, 60, 85),
+          c("Anaconda vert", "Eunectes_murinus", "Serpent", 130, 6.5, 25, 180),
+          c("Python réticulé", "Reticulated_python", "Serpent", 90, 6.0, 25, 85),
+          c("Vipère aspic", "Vipera_aspis", "Serpent", 0.25, 0.8, 15, 90),
+          c("Dragon de Komodo", "Komodo_dragon", "Reptile", 80, 2.8, 30, 240),
+          c("Aigle royal", "Golden_eagle", "Rapace", 5.5, 0.9, 32, 43),
+          c("Faucon pèlerin", "Peregrine_falcon", "Rapace", 1.0, 0.45, 16, 32),
+          c("Hibou grand-duc", "Eurasian_eagle-owl", "Rapace nocturne", 3.0, 0.7, 25, 35),
+          c("Pieuvre géante du Pacifique", "Giant_Pacific_octopus", "Céphalopode", 50, 4.3, 4, 180),
+          c("Brochet", "Northern_pike", "Poisson", 15, 1.1, 20, 14),
+          c("Barracuda", "Barracuda", "Poisson", 35, 1.6, 14, 15),
+          c("Murène verte", "Green_moray", "Poisson", 15, 2.0, 25, 30),
+          c("Suricate", "Meerkat", "Carnivore", 0.8, 0.5, 12, 70),
+          c("Furet", "Ferret", "Carnivore", 1.5, 0.5, 10, 42),
+          c("Ocelot", "Ocelot", "Carnivore", 12, 1.0, 15, 80),
+          c("Caracal", "Caracal", "Carnivore", 15, 0.9, 16, 78)
+        ]
+      },
+
+      "animaux fantastiques": {
+        label: "Animaux fantastiques",
+        cards: [
+          c("Dragon rouge", "Dragon", "Créature draconique", 18000, 22.0, 500, 365),
+          c("Dragon de glace", "Wyvern", "Créature draconique", 14000, 18.0, 400, 300),
+          c("Phénix", "Phoenix", "Oiseau légendaire", 120, 4.5, 1000, 99),
+          c("Licorne", "Unicorn", "Créature féerique", 650, 2.8, 250, 330),
+          c("Pégase", "Pegasus", "Cheval ailé", 750, 3.2, 200, 340),
+          c("Griffon", "Griffin", "Hybride légendaire", 900, 3.8, 180, 120),
+          c("Basilic", "Basilisk_(creature)", "Reptile légendaire", 1200, 12.0, 300, 90),
+          c("Kraken", "Kraken", "Monstre marin", 95000, 35.0, 600, 240),
+          c("Léviathan", "Leviathan", "Monstre marin", 160000, 40.0, 900, 400),
+          c("Yéti", "Yeti", "Cryptide", 420, 2.9, 120, 260),
+          c("Loup-garou", "Werewolf", "Métamorphe", 240, 2.4, 150, 63),
+          c("Golem de pierre", "Golem", "Créature élémentaire", 4500, 3.5, 800, 1),
+          c("Ent / Sylvebarbe", "Ent", "Esprit de forêt", 12000, 8.5, 2000, 365),
+          c("Manticore", "Manticore", "Bête mythique", 650, 3.5, 140, 110),
+          c("Vouivre", "Wyvern", "Draconidé", 6000, 14.0, 350, 180),
+          c("Hippogriffe", "Hippogriff", "Hybride légendaire", 700, 3.1, 160, 220),
+          c("Sirène des mers", "Mermaid", "Créature marine", 85, 2.0, 300, 270),
+          c("Chimère", "Chimera_(mythology)", "Hybride légendaire", 800, 3.6, 220, 120),
+          c("Salamandre de feu", "Salamanders_(mythology)", "Élémentaire", 40, 1.5, 300, 60),
+          c("Gargouille", "Gargoyle", "Gardien", 1500, 2.6, 500, 1),
+          c("Tigre à dents de sabre spectral", "Smilodon", "Bête ancienne", 350, 2.4, 120, 105),
+          c("Cerbère", "Cerberus", "Gardien infernal", 1400, 4.0, 1000, 90),
+          c("Djin / Génie", "Genie", "Esprit", 10, 3.0, 5000, 1),
+          c("Cockatrice", "Cockatrice", "Créature légendaire", 60, 1.8, 120, 42),
+          c("Kelpie", "Kelpie", "Esprit aquatique", 1100, 3.5, 300, 200),
+          c("Banshee / Esprit des brumes", "Banshee", "Esprit", 5, 1.7, 900, 1),
+          c("Minotaure", "Minotaur", "Bête légendaire", 950, 3.1, 250, 270),
+          c("Cyclope", "Cyclops", "Géant mythique", 2200, 4.8, 300, 270),
+          c("Troll des cavernes", "Troll", "Géant", 1800, 3.8, 400, 240),
+          c("Gobelin", "Goblin", "Créature nocturne", 45, 1.1, 70, 180),
+          c("Fée des bois", "Fairy", "Créature féerique", 0.2, 0.25, 400, 60),
+          c("Chupacabra", "Chupacabra", "Cryptide", 75, 1.4, 60, 90),
+          c("Mothman", "Mothman", "Cryptide", 110, 2.3, 80, 45),
+          c("Dragon oriental / Lung", "Chinese_dragon", "Dragon céleste", 12000, 25.0, 1000, 300),
+          c("Poulpe géant abyssal", "Giant_squid", "Monstre des abysses", 12000, 24.0, 400, 180),
+          c("Loup d'ombre", "Dire_wolf", "Bête nocturne", 190, 2.1, 130, 63),
+          c("Corbeau messager", "Raven", "Oiseau mystique", 3.0, 1.1, 250, 30),
+          c("Cheval spectral", "Nightmare_(horse)", "Monture sombre", 850, 2.9, 300, 340),
+          c("Tortue-île", "World_turtle", "Colosse", 500000, 150.0, 10000, 1000),
+          c("Renard à neuf queues", "Nine-tailed_fox", "Esprit renard", 120, 2.5, 1000, 100)
+        ]
+      },
+
+      "animaux mythologique grecque": {
+        label: "Animaux mythologique grecque",
+        cards: [
+          c("Pégase", "Pegasus", "Mythologie grecque", 750, 3.2, 200, 340),
+          c("Cerbère", "Cerberus", "Mythologie grecque", 1400, 4.0, 1000, 90),
+          c("Hydre de Lerne", "Lernaean_Hydra", "Mythologie grecque", 6500, 18.0, 999, 120),
+          c("Minotaure", "Minotaur", "Mythologie grecque", 950, 3.1, 250, 270),
+          c("Méduse / Gorgone", "Gorgon", "Mythologie grecque", 120, 2.2, 500, 270),
+          c("Chimère", "Chimera_(mythology)", "Mythologie grecque", 800, 3.6, 220, 120),
+          c("Griffon", "Griffin", "Mythologie grecque", 900, 3.8, 180, 120),
+          c("Taureau crétois", "Cretan_Bull", "Mythologie grecque", 1300, 3.2, 150, 280),
+          c("Lion de Némée", "Nemean_lion", "Mythologie grecque", 750, 3.4, 200, 110),
+          c("Biche de Cérynie", "Hind_of_Ceryneia", "Mythologie grecque", 180, 2.1, 300, 235),
+          c("Sanglier d'Érymanthe", "Erymanthian_boar", "Mythologie grecque", 1100, 3.0, 180, 115),
+          c("Oiseaux du lac Stymphale", "Stymphalian_birds", "Mythologie grecque", 45, 1.5, 200, 30),
+          c("Scylla", "Scylla", "Mythologie grecque", 5000, 12.0, 600, 180),
+          c("Charybde", "Charybdis", "Mythologie grecque", 80000, 25.0, 999, 365),
+          c("Typhon", "Typhon", "Mythologie grecque", 45000, 30.0, 1000, 365),
+          c("Échidna", "Echidna_(mythology)", "Mythologie grecque", 2500, 10.0, 800, 150),
+          c("Orthos", "Orthrus", "Mythologie grecque", 320, 2.0, 500, 63),
+          c("Phénix", "Phoenix", "Mythologie grecque", 120, 4.5, 1000, 99),
+          c("Hippocampe mythologique", "Hippocampus_(mythology)", "Mythologie grecque", 600, 3.5, 300, 240),
+          c("Sirène grecque", "Siren_(mythology)", "Mythologie grecque", 65, 1.8, 400, 270),
+          c("Harpie", "Harpy", "Mythologie grecque", 55, 1.9, 300, 45),
+          c("Sphinx grec", "Sphinx", "Mythologie grecque", 500, 3.2, 400, 120),
+          c("Centaure", "Centaur", "Mythologie grecque", 600, 2.6, 150, 330),
+          c("Satyre", "Satyr", "Mythologie grecque", 95, 1.8, 120, 270),
+          c("Cyclope Polyphème", "Cyclops", "Mythologie grecque", 2200, 4.8, 300, 270),
+          c("Python de Delphes", "Python_(mythology)", "Mythologie grecque", 3500, 14.0, 700, 120),
+          c("Ladon / Dragon des Hespérides", "Ladon_(mythology)", "Mythologie grecque", 8000, 20.0, 900, 180),
+          c("Colombe d'Aphrodite", "Dove", "Mythologie grecque", 0.4, 0.35, 100, 18),
+          c("Aigle de Zeus", "Eagle", "Mythologie grecque", 12, 1.4, 300, 45),
+          c("Chouette d'Athéna", "Little_owl", "Mythologie grecque", 0.3, 0.25, 200, 28),
+          c("Paon d'Héra", "Indian_peafowl", "Mythologie grecque", 6.0, 2.2, 200, 28),
+          c("Corbeau d'Apollon", "Raven", "Mythologie grecque", 2.0, 0.7, 250, 30),
+          c("Cygne d'Apollon", "Swan", "Mythologie grecque", 14, 1.6, 200, 35),
+          c("Dauphin de Poséidon", "Dolphin", "Mythologie grecque", 350, 3.2, 300, 365),
+          c("Taureau de Poséidon", "Bull", "Mythologie grecque", 1250, 3.0, 180, 280),
+          c("Bélier à toison d'or", "Golden_Fleece", "Mythologie grecque", 220, 2.0, 300, 150),
+          c("Chevaux de Diomède", "Mares_of_Diomedes", "Mythologie grecque", 700, 2.7, 150, 340),
+          c("Céto / Monstre marin", "Ceto", "Mythologie grecque", 50000, 22.0, 900, 365),
+          c("Argos / Chien d'Ulysse", "Argos_(dog)", "Mythologie grecque", 35, 1.1, 20, 63),
+          c("Mirmidon / Fourmi mythique", "Myrmidons", "Mythologie grecque", 60, 1.7, 120, 270)
+        ]
+      }
+    };
+
+    // Peupler le menu déroulant des 10 paquets
+    const selectDeckType = document.getElementById("select-deck-type");
+    Object.entries(DECK_PACKS).forEach(([key, pack]) => {
+      const opt = document.createElement("option");
+      opt.value = key;
+      opt.textContent = pack.label;
+      selectDeckType.appendChild(opt);
+    });
+
+    async function fetchWikiAnimalImage(card) {
+      const cacheKey = card.sci;
+      if (imageCache.has(cacheKey)) return imageCache.get(cacheKey);
 
       try {
-        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${animal.sci}`);
+        const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${card.sci}`);
         if (!res.ok) throw new Error("wiki summary failed");
         const data = await res.json();
         const candidate = data?.originalimage?.source || data?.thumbnail?.source || null;
         if (isValidAnimalPhotoUrl(candidate)) {
-          imageCache.set(animal.id, candidate);
+          imageCache.set(cacheKey, candidate);
           return candidate;
         }
       } catch {
-        // Ignore error
+        // Ignore network/API error
       }
 
-      imageCache.set(animal.id, null);
+      imageCache.set(cacheKey, null);
       return null;
     }
 
-    async function setAnimalVisual(animal, imgEl, fallbackEl) {
-      fallbackEl.textContent = animal.name.slice(0, 2).toUpperCase();
+    async function setAnimalVisual(card, imgEl, fallbackEl) {
+      fallbackEl.textContent = card.name.slice(0, 2).toUpperCase();
       fallbackEl.style.display = "block";
       imgEl.classList.add("hidden-img");
-      imgEl.alt = animal.name;
+      imgEl.alt = card.name;
 
       const url = IMAGE_MODE === "local"
-        ? `./images/${animal.id}.jpg`
-        : await fetchWikiAnimalImage(animal);
+        ? `./images/${encodeURIComponent(card.name)}.jpg`
+        : await fetchWikiAnimalImage(card);
 
       if (!url) return;
 
@@ -709,19 +1190,14 @@
       imgEl.src = url;
     }
 
-    function preloadAnimal(animal) {
-      if (!animal) return;
-      if (IMAGE_MODE === "local") {
-        const pre = new Image();
-        pre.src = `./images/${animal.id}.jpg`;
-      } else {
-        fetchWikiAnimalImage(animal).then(url => {
-          if (url) {
-            const pre = new Image();
-            pre.src = url;
-          }
-        });
-      }
+    function preloadAnimal(card) {
+      if (!card || IMAGE_MODE === "local") return;
+      fetchWikiAnimalImage(card).then(url => {
+        if (url) {
+          const pre = new Image();
+          pre.src = url;
+        }
+      });
     }
 
     const STAT_META = {
@@ -736,6 +1212,8 @@
     let isHost = false;
 
     let state = {
+      deckKey: "animaux de la forêt",
+      deckLabel: "Animaux de la forêt",
       myDeck: [],
       oppDeck: [],
       pot: [],
@@ -759,6 +1237,7 @@
     const hostStatus = document.getElementById("host-status");
     const lobbyError = document.getElementById("lobby-error");
 
+    const activeDeckLabelEl = document.getElementById("active-deck-label");
     const myCountEl = document.getElementById("my-count");
     const oppCountEl = document.getElementById("opp-count");
     const potBadgeEl = document.getElementById("pot-badge");
@@ -799,6 +1278,7 @@
     btnCreate.addEventListener("click", () => {
       setError("");
       btnCreate.disabled = true;
+      selectDeckType.disabled = true;
       isHost = true;
       const code = generateRoomCode();
       displayRoomCode.textContent = code;
@@ -815,6 +1295,7 @@
       peer.on("error", (err) => {
         setError("Erreur réseau : " + err.type + ". Réessaie.");
         btnCreate.disabled = false;
+        selectDeckType.disabled = false;
         roomCodeBox.classList.remove("visible");
       });
     });
@@ -865,23 +1346,29 @@
     }
 
     function startNewMatchAsHost() {
-      const shuffled = shuffle(ANIMALS);
-      const hostDeck = shuffled.slice(0, 20);
-      const guestDeck = shuffled.slice(20, 40);
+      const chosenKey = selectDeckType.value;
+      const pack = DECK_PACKS[chosenKey] || DECK_PACKS["animaux de la forêt"];
+      const pool = shuffle(pack.cards).slice(0, 40);
+      const hostDeck = pool.slice(0, 20);
+      const guestDeck = pool.slice(20, 40);
       const hostStarts = Math.random() < 0.5;
 
       send({
         type: "INIT_GAME",
+        deckKey: chosenKey,
+        deckLabel: pack.label,
         yourDeck: guestDeck,
         oppDeck: hostDeck,
         yourTurn: !hostStarts
       });
 
-      initGameState(hostDeck, guestDeck, hostStarts);
+      initGameState(chosenKey, pack.label, hostDeck, guestDeck, hostStarts);
     }
 
-    function initGameState(myDeck, oppDeck, isMyTurn) {
+    function initGameState(deckKey, deckLabel, myDeck, oppDeck, isMyTurn) {
       state = {
+        deckKey,
+        deckLabel,
         myDeck,
         oppDeck,
         pot: [],
@@ -890,6 +1377,7 @@
         selectedStat: null,
         readyForNext: { me: false, opp: false }
       };
+      activeDeckLabelEl.textContent = deckLabel;
       showScreen("game");
       renderChoosingPhase();
     }
@@ -897,7 +1385,7 @@
     function handleMessage(msg) {
       switch (msg.type) {
         case "INIT_GAME":
-          initGameState(msg.yourDeck, msg.oppDeck, msg.yourTurn);
+          initGameState(msg.deckKey, msg.deckLabel, msg.yourDeck, msg.oppDeck, msg.yourTurn);
           break;
         case "SELECT_STAT":
           if (state.phase === "choosing" && !state.isMyTurn) resolveRound(msg.stat);
@@ -1094,6 +1582,7 @@
       if (conn) { conn.close(); conn = null; }
       if (peer) { peer.destroy(); peer = null; }
       btnCreate.disabled = false;
+      selectDeckType.disabled = false;
       btnJoin.disabled = false;
       roomCodeBox.classList.remove("visible");
       inputRoomCode.value = "";
